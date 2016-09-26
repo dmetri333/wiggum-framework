@@ -4,6 +4,7 @@ namespace wiggum\foundation;
 use \wiggum\http\Request;
 use \wiggum\http\Response;
 use \wiggum\foundation\Application;
+use \wiggum\exceptions\PageNotFoundException;
 
 class Router {
 	
@@ -26,7 +27,7 @@ class Router {
 	public function process(Request $request, Response $response) {
 		
 		$actions = $this->parseURL($request);
-		
+	
 		if (!isset($actions))
 			throw new PageNotFoundException();
 
@@ -34,11 +35,6 @@ class Router {
 			throw new PageNotFoundException();
 		
 		$controller = new $actions['classPath']($this->app);
-
-		if (isset($this->extensions)) {
-			foreach ($this->extensions as $extName => $extMeta)
-				$controller->extend($extName, $extMeta);
-		}
 
 		if (isset($actions['parameters'])) {
 			$request->setParameters(array_merge($request->getParameters(), $actions['parameters']));

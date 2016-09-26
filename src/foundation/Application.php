@@ -246,7 +246,7 @@ class Application {
 	 * @param array $files
 	 */
 	private function loadConfigurationFiles($path) {
-		$files = ['config','errors', 'dictionary'];
+		$files = ['config','services','dictionary'];
 		
 		$items = [];
 		foreach ($files as $file) {
