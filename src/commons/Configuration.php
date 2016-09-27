@@ -1,5 +1,5 @@
 <?php
-namespace wiggum\foundation;
+namespace wiggum\commons;
 
 use \Closure;
 

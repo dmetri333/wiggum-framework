@@ -3,12 +3,13 @@ namespace wiggum\foundation;
 
 use \Exception;
 use \Throwable;
-use \wiggum\foundation\Container;
+use \wiggum\commons\Container;
+use \wiggum\commons\Configuration;
 use \wiggum\http\Request;
 use \wiggum\http\Response;
-use \wiggum\middleware\Runner;
+use \wiggum\foundation\Runner;
 use \wiggum\foundation\Router;
-use \wiggum\foundation\Configuration;
+
 
 class Application {
 
@@ -79,14 +80,6 @@ class Application {
 	 * 
 	 * @return string
 	 */
-	public function getConfigPath() {
-		return $this->basePath.DIRECTORY_SEPARATOR.'config';
-	}
-	
-	/**
-	 * 
-	 * @return string
-	 */
 	public function getBasePath() {
 		return $this->basePath;
 	}
@@ -101,6 +94,23 @@ class Application {
 	}
 	
 	/**
+	 *
+	 * @return string
+	 */
+	public function getConfigPath() {
+		return $this->basePath.DIRECTORY_SEPARATOR.'config';
+	}
+	
+	/**
+	 *
+	 * @return string
+	 */
+	public function getBootPath() {
+		return $this->basePath.DIRECTORY_SEPARATOR.'boot';
+	}
+	
+	/**
+	 * Move to kernel
 	 * 
 	 * @return Response
 	 */
@@ -116,6 +126,7 @@ class Application {
 	}
 	
 	/**
+	 * Move to kernel
 	 * 
 	 * @param Request $request
 	 * @param Response $response
@@ -135,6 +146,7 @@ class Application {
 	}
 	
 	/**
+	 * Move to kernel
 	 * 
 	 * @param Request $request
 	 * @param Response $response
@@ -159,7 +171,8 @@ class Application {
 	}
 	
 	/**
-	 *
+	 * Move to kernel
+	 * 
 	 * @return Request
 	 */
 	private function buildRequest() {
@@ -178,6 +191,7 @@ class Application {
 	}
 	
 	/**
+	 * Move to kernel
 	 * 
 	 * @param Response $response
 	 */
@@ -203,6 +217,8 @@ class Application {
 	}
 	
 	/**
+	 * Move to kernel
+	 * 
 	 * @param  Exception $e
 	 * @param  Request $request
 	 * @param  Response $response
@@ -221,7 +237,8 @@ class Application {
 	}
 	
 	/**
-	 *
+	 * Move to kernel
+	 * 
 	 * @param  Throwable $e
 	 * @param  Request $request
 	 * @param  Response $response
@@ -241,7 +258,8 @@ class Application {
 	
 	
 	/**
-	 *
+	 * Move to kernel
+	 * 
 	 * @param string $path
 	 * @param array $files
 	 */

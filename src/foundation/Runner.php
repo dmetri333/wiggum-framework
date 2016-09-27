@@ -1,5 +1,5 @@
 <?php
-namespace wiggum\middleware;
+namespace wiggum\foundation;
 
 use \wiggum\http\Request;
 use \wiggum\http\Response;
