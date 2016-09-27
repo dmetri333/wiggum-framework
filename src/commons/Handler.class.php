@@ -41,37 +41,22 @@ abstract class Handler {
 	}
 
 	/**
-	 * Render error as HTML.
+	 * Write to the error log if displayErrorDetails is false
 	 *
-	 * @param \Exception|\Throwable $error
+	 * @param \Exception|\Throwable $throwable
 	 *
-	 * @return string
+	 * @return void
 	 */
-	protected function renderErrorAsHtml($error) {
-		$html = sprintf('<div><strong>Type:</strong> %s</div>', get_class($error));
+	protected function writeToErrorLog($throwable) {
+		$message = 'Wiggum Application Error:' . PHP_EOL;
 	
-		if (($code = $error->getCode())) {
-			$html .= sprintf('<div><strong>Code:</strong> %s</div>', $code);
+		$message .= $this->renderErrorAsText($throwable);
+		while ($throwable = $throwable->getPrevious()) {
+			$message .= PHP_EOL . 'Previous error:' . PHP_EOL;
+			$message .= $this->renderErrorAsText($throwable);
 		}
 	
-		if (($message = $error->getMessage())) {
-			$html .= sprintf('<div><strong>Message:</strong> %s</div>', htmlentities($message));
-		}
-	
-		if (($file = $error->getFile())) {
-			$html .= sprintf('<div><strong>File:</strong> %s</div>', $file);
-		}
-	
-		if (($line = $error->getLine())) {
-			$html .= sprintf('<div><strong>Line:</strong> %s</div>', $line);
-		}
-	
-		if (($trace = $error->getTraceAsString())) {
-			$html .= '<h3>Trace</h3>';
-			$html .= sprintf('<pre>%s</pre>', htmlentities($trace));
-		}
-	
-		return $html;
+		$this->logError($message);
 	}
 	
 	/**
@@ -108,53 +93,13 @@ abstract class Handler {
 	}
 	
 	/**
-	 * Render error as Array.
+	 * Wraps the error_log function so that this can be easily tested
 	 *
-	 * @param \Exception|\Throwable $error
-	 *
-	 * @return array
+	 * @param
+	 *        	$message
 	 */
-	protected function renderErrorAsArray($error) {
-		return [
-			'type' => get_class($error),
-			'code' => $error->getCode(),
-			'message' => $error->getMessage(),
-			'file' => $error->getFile(),
-			'line' => $error->getLine(),
-			'trace' => explode("\n", $error->getTraceAsString())
-		];
+	protected function logError($message) {
+		error_log($message);
 	}
-	
-	/**
-	 * Render error as Xml.
-	 *
-	 * @param \Exception|\Throwable $error
-	 *
-	 * @return array
-	 */
-	protected function renderErrorAsXml($error) {
-		$xml = "";
-		
-		$xml .= "  <error>\n";
-		$xml .= "    <type>" . get_class($error) . "</type>\n";
-		$xml .= "    <code>" . $error->getCode() . "</code>\n";
-		$xml .= "    <message>" . $this->createCdataSection($error->getMessage()) . "</message>\n";
-		$xml .= "    <file>" . $error->getFile() . "</file>\n";
-		$xml .= "    <line>" . $error->getLine() . "</line>\n";
-		$xml .= "    <trace>" . $this->createCdataSection($error->getTraceAsString()) . "</trace>\n";
-		$xml .= "  </error>\n";
-		
-		return $xml;
-	}
-	
-	/**
-	 * Returns a CDATA section with the given content.
-	 *
-	 * @param string $content
-	 * @return string
-	 */
-	private function createCdataSection($content) {
-		return sprintf('<![CDATA[%s]]>', str_replace(']]>', ']]]]><![CDATA[>', $content));
-	}
-	
+
 }
