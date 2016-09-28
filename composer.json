@@ -1,5 +1,5 @@
 {
-	"name": "dmetri333/wiggum-framework",
+	"name": "wiggum/framework",
 	"autoload": {
 		"psr-4": {"wiggum\\": "src/"}
 	}
