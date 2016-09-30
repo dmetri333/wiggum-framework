@@ -23,7 +23,7 @@ abstract class Controller {
 	 * @return array
 	 */
 	public function getDictionary($name, $language = null) {
-		$dictionary = $this->app->settings->get('dictionary', []);
+		$dictionary = $this->app->config->get('dictionary', []);
 		
 		$name = isset($language) ? $language.'.'.$name : $name;
 		if (!isset($dictionary[$name])) {

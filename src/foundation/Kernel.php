@@ -20,7 +20,7 @@ class Kernel {
 	public function __construct(Application $app) {
 		$this->app = $app;
 		
-		$this->app->loadSettings($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
+		$this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
 		$this->app->loadEnvironment();
 		$this->app->loadBootFiles();
 	}
@@ -177,7 +177,7 @@ class Kernel {
 	 * @return array
 	 */
 	private function loadConfigurationFiles($path) {
-		$files = ['config','services','dictionary'];
+		$files = ['app','services','dictionary'];
 		
 		$items = [];
 		foreach ($files as $file) {

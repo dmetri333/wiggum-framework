@@ -7,7 +7,7 @@ use \wiggum\commons\Configuration;
 class Application {
 
 	public $basePath;
-	public $settings;
+	public $config;
 	
 	private $container;
 	private $middleware;
@@ -95,10 +95,10 @@ class Application {
 	
 	/**
 	 * 
-	 * @param array $settings
+	 * @param array $config
 	 */
-	public function loadSettings(array $settings) {
-		$this->settings = new Configuration($settings);
+	public function loadConfig(array $config) {
+		$this->config = new Configuration($config);
 	}
 	
 	/**
@@ -107,7 +107,7 @@ class Application {
 	public function loadBootFiles() {
 		$app = $this;
 	
-		$bootFiles = $this->settings->get('config.boot');
+		$bootFiles = $this->config->get('app.boot');
 		foreach ($bootFiles as $bootFile) {
 			require_once $this->basePath.DIRECTORY_SEPARATOR.$bootFile;
 		}
@@ -117,7 +117,7 @@ class Application {
 	 *
 	 */
 	public function loadEnvironment() {
-		date_default_timezone_set($this->settings->get('config.timezone'));
+		date_default_timezone_set($this->config->get('app.timezone'));
 		
 		mb_internal_encoding('UTF-8');
 	}
