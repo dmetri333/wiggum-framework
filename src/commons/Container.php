@@ -1,8 +1,6 @@
 <?php
 namespace wiggum\commons;
 
-use \wiggum\foundation\Application;
-
 class Container implements \ArrayAccess {
 	private $values = array();
 	private $factories;
@@ -10,11 +8,8 @@ class Container implements \ArrayAccess {
 	private $frozen = array();
 	private $raw = array();
 	private $keys = array();
-	private $app;
 	
-	public function __construct(Application $app, array $values = array()) {
-		$this->app = $app;
-		
+	public function __construct(array $values = array()) {
 		$this->factories = new \SplObjectStorage();
 		$this->protected = new \SplObjectStorage();
 
@@ -47,11 +42,11 @@ class Container implements \ArrayAccess {
 		}
 
 		if (isset($this->factories[$this->values[$id]])) {
-			return $this->values[$id]($this->app);
+			return $this->values[$id]($this);
 		}
 
 		$raw = $this->values[$id];
-		$val = $this->values[$id] = $raw($this->app);
+		$val = $this->values[$id] = $raw($this);
 		$this->raw[$id] = $raw;
 
 		$this->frozen[$id] = true;
