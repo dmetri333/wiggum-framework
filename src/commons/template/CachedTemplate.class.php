@@ -14,7 +14,7 @@ class CachedTemplate extends Template {
 	 * @param string $cacheId - unique cache identifier
 	 * @param int $expire - [default=900] number of seconds the cache will live
 	 */
-	public function __construct($cacheId, $cachePath, $directory, $expire = 900, $basePath = BASE_PATH, $fileExtension = 'tpl.php') {
+	public function __construct($cacheId, $cachePath, $directory, $basePath, $expire = 900, $fileExtension = 'tpl.php') {
 		parent::__construct($directory, $basePath, $fileExtension);
 		
 		$this->cacheId = $cacheId ? md5($cacheId) : $cacheId;

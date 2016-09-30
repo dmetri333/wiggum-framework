@@ -1,7 +1,6 @@
 <?php
 namespace wiggum\commons\io;
 
-use \wiggum\commons\logging\Logger;
 use \wiggum\commons\util\File;
 
 class FormFileUpload {
@@ -32,7 +31,7 @@ class FormFileUpload {
         $result = false;
         
         if(is_array($this->fileArray['tmp_name'])) {
-        	Logger::error('file array is in multi upload format, use doMultiUpload()', __METHOD__);
+        	error_log('file array is in multi upload format, use doMultiUpload()');
         	return false;
         }
         
@@ -40,14 +39,13 @@ class FormFileUpload {
 		if($errno == UPLOAD_ERR_OK) {
 
 			if(!File::createFolder($this->uploadDir,true)) {
-	        	Logger::error('Failed to create directory ' . $this->uploadDir, __METHOD__);
+	        	error_log('Failed to create directory ' . $this->uploadDir);
 	        	return false;
 	        }
 			
 			if(is_uploaded_file($this->fileArray['tmp_name'])) {
 				$result = move_uploaded_file($this->fileArray['tmp_name'], $this->uploadDir.$this->fileArray['name']);
 			} else {
-				Logger::notice("uploaded file {$this->fileArray['tmp_name']} not uploaded through php, using copy", __METHOD__);	
 				$result = copy($this->fileArray['tmp_name'], $this->uploadDir.$this->fileArray['name']);
 			}
 			
@@ -58,7 +56,7 @@ class FormFileUpload {
 				$this->setMimeType($this->uploadDir.$this->fileArray['name']);
 			}
 		} else {
-			Logger::error($this->getErrMsg($errno), __METHOD__);    
+			error_log($this->getErrMsg($errno));    
 			$result = false;
 		}
         
@@ -72,7 +70,7 @@ class FormFileUpload {
      */
     public function doMultiUpload() {
 		if(!File::createFolder($this->uploadDir,true)) {
-        	Logger::error('Failed to create directory ' . $this->uploadDir, __METHOD__);
+        	error_log('Failed to create directory ' . $this->uploadDir);
         	return false;
         }
     	
@@ -80,12 +78,11 @@ class FormFileUpload {
     	$numUploaded = 0;
     	for($i=0; $i<$numFiles; $i++) {
     		$errno = $this->fileArray['error'][$i];
-    		if($errno == UPLOAD_ERR_OK) {
+    		if ($errno == UPLOAD_ERR_OK) {
     			
     			if(is_uploaded_file($this->fileArray['tmp_name'][$i])) {
 					$result = move_uploaded_file($this->fileArray['tmp_name'][$i], $this->uploadDir.$this->fileArray['name'][$i]);
 				} else {
-					Logger::notice("uploaded file {$this->fileArray['tmp_name'][$i]} not uploaded through php, using copy", __METHOD__);	
 					$result = copy($this->fileArray['tmp_name'][$i], $this->uploadDir.$this->fileArray['name'][$i]);
 				}
 				
@@ -105,7 +102,7 @@ class FormFileUpload {
 				}
     			
     		} else {
-    			Logger::warning($this->getErrMsg($errno), __METHOD__);
+    			error_log($this->getErrMsg($errno));
     		}
     		
     	}
@@ -144,7 +141,7 @@ class FormFileUpload {
 	 */
     public function getFileName($index = 0) {
     	if(count($this->uploaded) <= $index) { 
-    		Logger::error('index out of bounds', __METHOD__);
+    		error_log('index out of bounds');
     		return false; 
     	}
     	return $this->uploaded[$index]['name'];
@@ -157,7 +154,7 @@ class FormFileUpload {
      */
     public function getErrorCode($index = 0) {
     	if(count($this->uploaded) <= $index) { 
-    		Logger::error('index out of bounds', __METHOD__);
+    		error_log('index out of bounds');
     		return false; 
     	}
     	return $this->uploaded[$index]['error'];
@@ -170,7 +167,7 @@ class FormFileUpload {
      */
     public function getTempFileName($index = 0) {
 		if(count($this->uploaded) <= $index) { 
-    		Logger::error('index out of bounds', __METHOD__);
+    		error_log('index out of bounds');
     		return false; 
     	}
     	return $this->uploaded[$index]['tmp_name'];
@@ -183,7 +180,7 @@ class FormFileUpload {
      */
     public function getFileType($index = 0) {
     	if(count($this->uploaded) <= $index) { 
-    		Logger::error('index out of bounds', __METHOD__);
+    		error_log('index out of bounds');
     		return false; 
     	}
     	return $this->uploaded[$index]['type'];
@@ -196,7 +193,7 @@ class FormFileUpload {
      */
     public function getFileSize($index = 0) {
     	if(count($this->uploaded) <= $index) { 
-    		Logger::error('index out of bounds', __METHOD__);
+    		error_log('index out of bounds');
     		return false; 
     	}
     	return $this->uploaded[$index]['size'];
@@ -217,7 +214,7 @@ class FormFileUpload {
      */
 	public function getFileExt($index = 0) {
 		if(count($this->uploaded) <= $index) {
-    		Logger::error('index out of bounds', __METHOD__);
+    		error_log('index out of bounds');
     		return false; 
     	}
 		return File::getExt($this->uploaded[$index]['name']);
@@ -232,7 +229,7 @@ class FormFileUpload {
 	 */
 	private function setMimeType($file, $index = 0) {
 		if(count($this->uploaded) <= $index) {
-    		Logger::error('index out of bounds', __METHOD__);
+    		error_log('index out of bounds');
     		return false; 
     	}
 		
@@ -246,7 +243,7 @@ class FormFileUpload {
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
 			
 			if(!$finfo) {
-  				Logger::error('finfo can\'t read mime db', __METHOD__);
+  				error_log('finfo can\'t read mime db');
   			} else {
    				$info = finfo_file($finfo, $file);
    				finfo_close($finfo);

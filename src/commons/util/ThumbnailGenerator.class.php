@@ -2,7 +2,6 @@
 namespace wiggum\commons\util;
 
 use \Exception;
-use \wiggum\commons\logging\Logger;
 use \wiggum\commons\imagery\ImageProcessorIM;
 use \wiggum\commons\imagery\ImageProcessorGD;
 
@@ -19,8 +18,8 @@ class ThumbnailGenerator {
 		try {
 			$this->imageProcessor = new ImageProcessorIM($path, $filename);
 		} catch(Exception $e) {
-			Logger::error($e->getMessage(), __METHOD__);
-			Logger::info('falling back to gd processor ...', __METHOD__);
+			error_log($e->getMessage());
+			error_log('falling back to gd processor ...');
 			$this->imageProcessor = new ImageProcessorGD($path, $filename);
 		}
 	 }

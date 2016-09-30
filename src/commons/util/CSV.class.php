@@ -1,8 +1,6 @@
 <?php
 namespace wiggum\commons\util;
 
-use \wiggum\commons\logging\Logger;
-
 class CSV {
 	
 	private $labels;
@@ -36,7 +34,7 @@ class CSV {
 		$output = array();
 		$labels = array();
 		
-		if($handle) {
+		if ($handle) {
 			$count = 0;
 			
 			while(($data = fgetcsv($handle)) !== false) {
@@ -56,9 +54,8 @@ class CSV {
 				$count++;
 				
 			}
-			Logger::debug("parsed {$count} lines", 'CSV');
 		} else {
-			Logger::debug("could not get file handle", 'CSV');
+			error_log("could not get file handle");
 		}
 		fclose($handle);		
 		

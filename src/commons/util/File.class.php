@@ -4,8 +4,6 @@ namespace wiggum\commons\util;
 use \RecursiveDirectoryIterator;
 use \RecursiveIteratorIterator;
 
-use \wiggum\commons\logging\Logger;
-
 class File {
 	
 	/**
@@ -16,11 +14,9 @@ class File {
 	 * @return boolean
 	 */
 	public static function createFolder($fullPath, $makeParents = true) {
-		if(file_exists($fullPath)) {
-			Logger::notice('Folder exists '.$fullPath, __METHOD__);
+		if (file_exists($fullPath)) {
 			return true;
 		} else {
-			Logger::info('creating directory '.$fullPath, __METHOD__);
 			$result = mkdir($fullPath, MKDIR_MODE, $makeParents);
 			if(!$result) {
 				return false;
@@ -47,11 +43,12 @@ class File {
 	 * @return boolean
 	 */
 	public static function deleteDirectory($dir) {
-		Logger::info($dir, __METHOD__);
 		if (is_dir($dir))
 			$dirHandle = opendir($dir);
+		
 		if (!$dirHandle)
 			return false;
+		
 		while ($file = readdir($dirHandle)) {
 			if ($file != "." && $file != "..") {
 				if (!is_dir($dir."/".$file))
@@ -60,6 +57,7 @@ class File {
 					self::deleteDirectory($dir.'/'.$file);          
 			}
 		}
+		
 		closedir($dirHandle);
 		rmdir($dir);
 		return true;

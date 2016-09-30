@@ -4,7 +4,6 @@ namespace wiggum\commons\imagery;
 use \BadFunctionCallException;
 use \RuntimeException;
 use \Exception;
-use \wiggum\commons\logging\Logger;
 
 class ImageProcessorGD extends ImageProcessor {
 	
@@ -101,8 +100,7 @@ class ImageProcessorGD extends ImageProcessor {
 		} else {
 			imagejpeg($dstImg, $this->dir . $thumbName, 100);
 		}	
-		Logger::info("created thumbnail {$thumbName}", __METHOD__);
-		
+	
 		imagedestroy($dstImg);
 		imagedestroy($srcImg);
 		
@@ -114,7 +112,7 @@ class ImageProcessorGD extends ImageProcessor {
 	 * @see wiggum/commons/imagery/wiggum\commons\imagery.ImageProcessor::createLogoWatermark()
 	 */
 	public function createLogoWatermark($imagePath, $width, $height, $prefix = 'wm_') {
-		Logger::warning('gd watermark not supported', __METHOD__);
+		error_log('gd watermark not supported');
 		return false;
 	}
 	
@@ -123,7 +121,7 @@ class ImageProcessorGD extends ImageProcessor {
 	 * @see wiggum/commons/imagery/wiggum\commons\imagery.ImageProcessor::createTextWatermark()
 	 */
 	public function createTextWatermark($text, $width, $height, $prefix = 'wm_', $textAngle = -30.0, $textOpacity = 0.4) {
-		Logger::warning('gd watermark not supported', __METHOD__);
+		error_log('gd watermark not supported');
 		return false;
 	}
 	

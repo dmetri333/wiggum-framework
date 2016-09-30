@@ -4,7 +4,6 @@ namespace wiggum\commons\imagery;
 use \Imagick;
 use \ImagickDraw;
 use \RuntimeException;
-use \wiggum\commons\logging\Logger;
 
 class ImageProcessorIM extends ImageProcessor {
 	
@@ -50,8 +49,6 @@ class ImageProcessorIM extends ImageProcessor {
 			$imagick->writeImage($this->dir.$thumbName);
 			$imagick->clear();
 			$imagick->destroy();
-			
-			Logger::info("created thumbnail {$thumbName}", __METHOD__);
 			
 			return $thumbName;
 		}
@@ -103,7 +100,6 @@ class ImageProcessorIM extends ImageProcessor {
 			$imagick->clear();
 			$imagick->destroy();
 		
-			Logger::info("created watermark {$thumbName}", __METHOD__);
 			return $thumbName;
 		}
 		
@@ -159,7 +155,6 @@ class ImageProcessorIM extends ImageProcessor {
 			$imagick->clear();
 			$imagick->destroy();
 		
-			Logger::info("created watermark {$thumbName}", __METHOD__);
 			return $thumbName;
 		}
 		

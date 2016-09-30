@@ -19,7 +19,7 @@ class Template {
 	 * @param string $basePath
 	 * @param string $fileExtension [default='tpl.php']
 	 */
-	public function __construct($directory, $basePath = BASE_PATH, $fileExtension = 'tpl.php') {
+	public function __construct($directory, $basePath, $fileExtension = 'tpl.php') {
 		$this->directory = $directory;
 		$this->basePath = $basePath;
 		$this->fileExtension = $fileExtension;
@@ -33,6 +33,17 @@ class Template {
 	 */
 	public function set($name, $value) {
 		$this->vars[$name] = is_object($value) ? (method_exists($value, 'fetch') ? $value->fetch() : $value) : $value;
+	}
+	
+	/**
+	 * Appends all of the template variable to the end of the vars list
+	 *
+	 * @param array $values
+	 */
+	public function setAll(array $values) {
+		foreach ($values as $name => $value) {
+			$this->set($name, $value);
+		}
 	}
 	
 	/**
