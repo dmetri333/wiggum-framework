@@ -2,6 +2,7 @@
 namespace wiggum\foundation;
 
 use \wiggum\commons\Container;
+use \wiggum\commons\Configuration;
 
 class Application {
 
@@ -17,15 +18,12 @@ class Application {
 	 * Create new application
 	 *
 	 */
-	public function __construct($basePath, $settings) {
-		$this->settings = $settings;
-		$this->basePath = $basePath;
+	public function __construct($basePath) {
+		$this->setBasePath($basePath);
 		
 		$this->container = new Container();
 		$this->middleware = [];
 		$this->routes = [];
-		
-		$this->load();
 	}
 	
 	/**
@@ -92,26 +90,36 @@ class Application {
 	 * @param  string  $basePath
 	 */
 	public function setBasePath($basePath) {
-		$this->basePath = $basePath;
+		$this->basePath  = rtrim($basePath, '\/');
+	}
+	
+	/**
+	 * 
+	 * @param array $settings
+	 */
+	public function loadSettings(array $settings) {
+		$this->settings = new Configuration($settings);
+	}
+	
+	/**
+	 * 
+	 */
+	public function loadBootFiles() {
+		$app = $this;
+	
+		$bootFiles = $this->settings->get('config.boot');
+		foreach ($bootFiles as $bootFile) {
+			require_once $this->basePath.DIRECTORY_SEPARATOR.$bootFile;
+		}
 	}
 	
 	/**
 	 *
 	 */
-	public function load() {
-		$app = $this;
-	
-		$config = $this->settings->get('config');
+	public function loadEnvironment() {
+		date_default_timezone_set($this->settings->get('config.timezone'));
 		
-		//add services
-		require_once $this->basePath.DIRECTORY_SEPARATOR.$config['boot.services'];
-	
-		//add middleware
-		require_once $this->basePath.DIRECTORY_SEPARATOR.$config['boot.middleware'];
-	
-		//add routes
-		require_once $this->basePath.DIRECTORY_SEPARATOR.$config['boot.routes'];
-	
+		mb_internal_encoding('UTF-8');
 	}
 	
 }

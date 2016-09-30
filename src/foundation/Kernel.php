@@ -3,7 +3,6 @@ namespace wiggum\foundation;
 
 use \Exception;
 use \Throwable;
-use \wiggum\commons\Configuration;
 use \wiggum\http\Request;
 use \wiggum\http\Response;
 use \wiggum\foundation\Runner;
@@ -15,24 +14,18 @@ class Kernel {
 	private $app;
 
 	/**
-	 * Create new application
+	 * start the engine
 	 *
 	 */
-	public function __construct($basePath) {
-		$basePath = rtrim($basePath, '\/');
-		$configPath = $basePath.DIRECTORY_SEPARATOR.'config';
+	public function __construct(Application $app) {
+		$this->app = $app;
 		
-		$settings = new Configuration($this->loadConfigurationFiles($configPath));
-
-		date_default_timezone_set($settings->get('config.timezone'));
-		
-		mb_internal_encoding('UTF-8');
-		
-		$this->app = new \wiggum\foundation\Application($basePath, $settings);
+		$this->app->loadSettings($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
+		$this->app->loadEnvironment();
+		$this->app->loadBootFiles();
 	}
 	
 	/**
-	 * Move to kernel
 	 * 
 	 * @return Response
 	 */
@@ -48,10 +41,10 @@ class Kernel {
 	}
 	
 	/**
-	 * Move to kernel
 	 * 
 	 * @param Request $request
 	 * @param Response $response
+	 * 
 	 * @return Response
 	 */
 	private function process(Request $request, Response $response) {
@@ -79,10 +72,10 @@ class Kernel {
 	}
 	
 	/**
-	 * Move to kernel
 	 * 
 	 * @param Request $request
 	 * @param Response $response
+	 * 
 	 * @return unknown
 	 */
 	private function callMiddlewareStack(Request $request, Response $response) {
@@ -93,7 +86,6 @@ class Kernel {
 	}
 	
 	/**
-	 * Move to kernel
 	 * 
 	 * @return Request
 	 */
@@ -113,7 +105,6 @@ class Kernel {
 	}
 	
 	/**
-	 * Move to kernel
 	 * 
 	 * @param Response $response
 	 */
@@ -139,11 +130,11 @@ class Kernel {
 	}
 	
 	/**
-	 * Move to kernel
 	 * 
 	 * @param  Exception $e
 	 * @param  Request $request
 	 * @param  Response $response
+	 * 
 	 * @return Response
 	 * @throws Exception
 	 */
@@ -159,11 +150,11 @@ class Kernel {
 	}
 	
 	/**
-	 * Move to kernel
 	 * 
 	 * @param  Throwable $e
 	 * @param  Request $request
 	 * @param  Response $response
+	 * 
 	 * @return Response
 	 * @throws Throwable
 	 */
@@ -180,10 +171,10 @@ class Kernel {
 	
 	
 	/**
-	 * Move to kernel
 	 * 
 	 * @param string $path
-	 * @param array $files
+
+	 * @return array
 	 */
 	private function loadConfigurationFiles($path) {
 		$files = ['config','services','dictionary'];
@@ -194,6 +185,5 @@ class Kernel {
 		}
 		return $items;
 	}
-	
 	
 }
