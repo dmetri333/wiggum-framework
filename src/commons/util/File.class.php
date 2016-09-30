@@ -6,6 +6,8 @@ use \RecursiveIteratorIterator;
 
 class File {
 	
+	const MKDIR_MODE = 0755;
+	
 	/**
 	 * Create a folder
 	 * 
@@ -17,7 +19,7 @@ class File {
 		if (file_exists($fullPath)) {
 			return true;
 		} else {
-			$result = mkdir($fullPath, MKDIR_MODE, $makeParents);
+			$result = mkdir($fullPath, self::MKDIR_MODE, $makeParents);
 			if(!$result) {
 				return false;
 			}
