@@ -117,7 +117,7 @@ class Application {
 	 *
 	 */
 	public function loadEnvironment() {
-		date_default_timezone_set($this->config->get('app.timezone'));
+		date_default_timezone_set($this->config->get('app.timezone', 'UTC'));
 		
 		mb_internal_encoding('UTF-8');
 	}

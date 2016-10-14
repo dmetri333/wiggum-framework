@@ -18,6 +18,14 @@ abstract class Controller {
 	
 	/**
 	 * 
+	 * @return \wiggum\foundation\Application
+	 */
+	public function getApplication() {
+		return $this->app;
+	}
+	
+	/**
+	 * 
 	 * @param string $name
 	 * @param string $language
 	 * @return array
