@@ -75,6 +75,10 @@ class Request {
 		$this->parameters = $parameters;
 	}
 	
+	public function setParameter($name, $value) {
+		$this->parameters[$name] = $value;
+	}
+	
 	public function getAttributes() {
 		return $this->attributes;
 	}
