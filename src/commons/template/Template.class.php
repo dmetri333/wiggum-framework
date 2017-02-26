@@ -11,6 +11,8 @@ class Template {
 	protected $file;
 	protected $path;
 	
+	protected $functions = array();
+	
 	private $vars = array();
 	
 	/**
@@ -108,13 +110,72 @@ class Template {
 	 */
 	protected function batch($var, $functions) {
 		foreach (explode('|', $functions) as $function) {
-			if (is_callable($function)) {
+			if ($this->functionExist($function)) {
+				$var = call_user_func([$this, $function], $var);
+			} else if (is_callable($function)) {
 				$var = call_user_func($function, $var);
 			} else {
 				throw new LogicException('The batch function could not find the "' . $function . '" function.');
 			}
 		}
 		return $var;
+	}
+	
+	/**
+	 * 
+	 * @param string $name
+	 * @param array $arguments
+	 * @return mixed
+	 */
+	public function __call($name, $arguments) {
+		
+		if (!$this->functionExist($name)) {
+			throw new LogicException('The template function "' . $name . '" was not found.');
+		}
+		
+		return call_user_func_array($this->functions[$name], $arguments);
+	}
+	
+	/**
+	 * 
+	 * @param string $name
+	 * @param callback $callback
+	 * @throws LogicException
+	 * @return \wiggum\commons\template\Template
+	 */
+	public function functionRegister($name, $callback) {
+		
+		if ($this->functionExist($name)) {
+			throw new LogicException('The template function name "' . $name . '" is already registered.');
+		}
+		
+		$this->functions[$name] = $callback;
+		return $this;
+	}
+	
+	/**
+	 * 
+	 * @param string $name
+	 * @throws LogicException
+	 * @return \wiggum\commons\template\Template
+	 */
+	public function functionDrop($name) {
+		
+		if (!$this->functionExist($name)) {
+			throw new LogicException('The template function "' . $name . '" was not found.');
+		}
+		
+		unset($this->functions[$name]);
+		return $this;
+	}
+	
+	/**
+	 * 
+	 * @param string $name
+	 * @return boolean
+	 */
+	public function functionExist($name) {
+		return isset($this->functions[$name]);
 	}
 	
 }
