@@ -77,7 +77,6 @@ abstract class Controller {
 	 * in the container that is callable and if so, calls it.
 	 *
 	 * @param string $method
-	 * @param array $args
 	 * @return mixed
 	 */
 	public function __get($name) {
@@ -85,8 +84,17 @@ abstract class Controller {
 			$obj = $this->app->getContainer()->offsetGet($name);
 			return $obj;
 		}
-	
+		
 		throw new \Exception('Unrecognized property '.$name);
+	}
+	
+	/**
+	 * 
+	 * @param string $name
+	 * @return mixed
+	 */
+	public function has($name) {
+		return $this->app->getContainer()->offsetExists($name);
 	}
 	
 	/**
