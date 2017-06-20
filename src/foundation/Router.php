@@ -63,9 +63,12 @@ class Router {
 		if ($path == '/' && isset($routing[$path])) {
 			return $this->controllerActions([], $routing[$path]);
 		}
+		
+		if (isset($routing[$path])) {
+			return $this->controllerActions([], $routing[$path]);
+		}
 	
 		$segments = $request->getContextPathSegments();
-		
 		if (isset($routing[$segments[0]])) {
 			return $this->controllerActions($segments, $routing[$segments[0]]);
 		}
