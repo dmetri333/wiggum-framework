@@ -163,7 +163,7 @@ class Request {
 	}
 	
 	public function getHeader($name) {
-		return $this->headers[$name];
+		return isset($this->headers[$name]) ? $this->headers[$name] : null;
 	}
 	
 }
