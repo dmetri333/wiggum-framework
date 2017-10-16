@@ -53,8 +53,8 @@ class Kernel {
 			
 			$this->app->addMiddleware(function(Request $request, Response $response, callable $next) {
 			
-				$router = new Router($this->app);
-				$response = $router->process($request, $response);
+			    $router =  $this->app->getContainer()->offsetGet('router');
+			    $response = $router->process($request, $response);
 					
 				$response = $next($request, $response);
 			

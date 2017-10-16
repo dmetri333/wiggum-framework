@@ -49,7 +49,7 @@ class Application {
 	 * @param mixed $route
 	 */
 	public function addRoute($pattern, $route) {
-		$this->routes[$pattern] = $route;
+	    $this->routes[$pattern] = $this->getContainer()->offsetGet('router')->map($methods, $pattern, $route);
 	}
 	
 	/**
