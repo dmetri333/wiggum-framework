@@ -48,7 +48,7 @@ class Application {
 	 * @param string $pattern
 	 * @param mixed $route
 	 */
-	public function addRoute($pattern, $route) {
+	public function addRoute($methods, $pattern, $route) {
 	    $this->routes[$pattern] = $this->getContainer()->offsetGet('router')->map($methods, $pattern, $route);
 	}
 	
