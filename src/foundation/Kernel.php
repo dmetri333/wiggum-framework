@@ -6,8 +6,8 @@ use \Throwable;
 use \wiggum\http\Request;
 use \wiggum\http\Response;
 use \wiggum\foundation\Runner;
-use \wiggum\foundation\Router;
 use \wiggum\foundation\Application;
+use \wiggum\exceptions\PageNotFoundException;
 
 class Kernel {
 
@@ -48,19 +48,22 @@ class Kernel {
 	 * @return Response
 	 */
 	private function process(Request $request, Response $response) {
-	
-		try {
-			
-			$this->app->addMiddleware(function(Request $request, Response $response, callable $next) {
-			
-			    $router =  $this->app->getContainer()->offsetGet('router');
-			    $response = $router->process($request, $response);
-					
-				$response = $next($request, $response);
-			
+        try {
+
+            $router = $this->app->getContainer()->offsetGet('router');
+            $actions = $router->process($request, $response);
+             
+            $actions = $this->applyRouteFilters($actions);
+            $this->applyRouteMiddleware($actions);
+            
+		    $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($actions) {
+			   
+		        $response = $this->executeRoute($actions, $request, $response);
+			    $response = $next($request, $response);
+				
 				return $response;
 			});
-	
+
 			$response = $this->callMiddlewareStack($request, $response);
 		} catch (Exception $e) {
 			$response = $this->handleException($e, $request, $response);
@@ -72,17 +75,44 @@ class Kernel {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param Request $request
 	 * @param Response $response
-	 * 
-	 * @return unknown
+	 *
+	 * @return Response
 	 */
 	private function callMiddlewareStack(Request $request, Response $response) {
 		$runner = new Runner($this->app->getMiddleware());
 		$response = $runner($request, $response);
 	
 		return $response;
+	}
+	
+	/**
+	 * 
+	 * @param array $actions
+	 * @return array
+	 */
+	private function applyRouteFilters($actions) {
+	    $filters = isset($actions['filters']) ? $actions['filters'] : [];
+	    
+	    foreach ($filters as $filter) {
+	        $actions = $filter($actions);
+	    }
+	    
+	    return $actions;
+	}
+	
+	/**
+	 *
+	 * @param array $actions
+	 */
+	private function applyRouteMiddleware($actions) {
+	    if (isset($actions['middleware']) && is_array($actions['middleware']) && !empty($actions['middleware'])) {
+	        foreach ($actions['middleware'] as $middleware) {
+	           $this->app->addMiddleware($middleware);
+	        }
+	    }
 	}
 	
 	/**
@@ -127,6 +157,38 @@ class Kernel {
 	
 			echo $response->getOutput();
 		}
+	}
+	
+	/**
+	 *
+	 * @param array $actions
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws PageNotFoundException
+	 * @return Response
+	 */
+	private function executeRoute($actions, Request $request, Response $response) {
+	    
+	    if (!isset($actions))
+	        throw new PageNotFoundException();
+	        
+        if (!isset($actions['classPath']))
+            throw new PageNotFoundException();
+            
+        $controller = new $actions['classPath']($this->app);
+        
+        if (isset($actions['parameters'])) {
+            $request->setParameters(array_merge($request->getParameters(), $actions['parameters']));
+        }
+        
+        if (isset($actions['properties'])) {
+            foreach ($actions['properties'] as $property => $value) {
+                $controller->{$property} = $value;
+            }
+        }
+        
+        $method = isset($actions['method']) && method_exists($controller, $actions['method']) ? $actions['method'] : 'doDefault';
+        return $controller->$method($request, $response);
 	}
 	
 	/**

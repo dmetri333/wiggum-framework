@@ -85,7 +85,7 @@ abstract class Controller {
 			return $obj;
 		}
 		
-		throw new \Exception('Unrecognized property '.$name);
+		throw new \Exception('Unrecognized property ' . $name);
 	}
 	
 	/**

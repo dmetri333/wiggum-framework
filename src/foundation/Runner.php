@@ -30,8 +30,8 @@ class Runner {
 	}
 
 	/**
-	 * 
-	 * @param unknown $entry
+	 *
+	 * @param mixed $entry
 	 * @return \wiggum\http\Response
 	 */
 	protected function resolve($entry) {

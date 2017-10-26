@@ -11,7 +11,6 @@ class Application {
 	
 	private $container;
 	private $middleware;
-	private $routes;
 	
 
 	/**
@@ -23,33 +22,23 @@ class Application {
 		
 		$this->container = new Container();
 		$this->middleware = [];
-		$this->routes = [];
 	}
 	
 	/**
 	 * 
 	 * @param string $name
-	 * @param closer $service
+	 * @param mixed $service
 	 */
 	public function addService($name, $service) {
 		$this->container[$name] = $service;
 	}
 	
 	/**
-	 * 
-	 * @param closer $middlewaree
+	 *
+	 * @param mixed $middlewaree
 	 */
 	public function addMiddleware($middleware) {
 		$this->middleware[] = $middleware;
-	}
-	
-	/**
-	 * 
-	 * @param string $pattern
-	 * @param mixed $route
-	 */
-	public function addRoute($methods, $pattern, $route) {
-	    $this->routes[$pattern] = $this->getContainer()->offsetGet('router')->map($methods, $pattern, $route);
 	}
 	
 	/**
@@ -66,14 +55,6 @@ class Application {
 	 */
 	public function getMiddleware() {
 		return $this->middleware;
-	}
-	
-	/**
-	 * 
-	 * @return array
-	 */
-	public function getRoutes() {
-		return $this->routes;
 	}
 	
 	/**
@@ -120,6 +101,22 @@ class Application {
 		date_default_timezone_set($this->config->get('app.timezone', 'UTC'));
 		
 		mb_internal_encoding('UTF-8');
+	}
+	
+	/**
+	 * Calling a non-existant var on Controller checks to see if there's an item
+	 * in the container that is callable and if so, calls it.
+	 *
+	 * @param string $method
+	 * @return mixed
+	 */
+	public function __get($name) {
+	    if ($this->container->offsetExists($name)) {
+	        $obj = $this->container->offsetGet($name);
+	        return $obj;
+	    }
+	    
+	    throw new \Exception('Unrecognized property ' . $name);
 	}
 	
 }
