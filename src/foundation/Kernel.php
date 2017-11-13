@@ -53,8 +53,7 @@ class Kernel {
             $router = $this->app->getContainer()->offsetGet('router');
             $actions = $router->process($request, $response);
              
-            $actions = $this->applyRouteFilters($actions);
-            $this->applyRouteMiddleware($actions);
+            $actions = $this->preProcessRoute($actions);
             
 		    $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($actions) {
 			   
@@ -93,27 +92,24 @@ class Kernel {
 	 * @param array $actions
 	 * @return array
 	 */
-	private function applyRouteFilters($actions) {
-	    $filters = isset($actions['filters']) ? $actions['filters'] : [];
+	private function preProcessRoute($actions) {
 	    
+	    //apply fitlers
+	    $filters = isset($actions['filters']) ? $actions['filters'] : [];
 	    foreach ($filters as $filter) {
 	        $actions = $filter($actions);
+	    }
+	    
+	    //add addtional routes
+	    if (isset($actions['middleware']) && is_array($actions['middleware']) && !empty($actions['middleware'])) {
+	        foreach ($actions['middleware'] as $middleware) {
+	            $this->app->addMiddleware($middleware);
+	        }
 	    }
 	    
 	    return $actions;
 	}
 	
-	/**
-	 *
-	 * @param array $actions
-	 */
-	private function applyRouteMiddleware($actions) {
-	    if (isset($actions['middleware']) && is_array($actions['middleware']) && !empty($actions['middleware'])) {
-	        foreach ($actions['middleware'] as $middleware) {
-	           $this->app->addMiddleware($middleware);
-	        }
-	    }
-	}
 	
 	/**
 	 * 
