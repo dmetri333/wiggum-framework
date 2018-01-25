@@ -2,43 +2,38 @@
 namespace wiggum\foundation;
 
 use \wiggum\http\Request;
-use \wiggum\http\Response;
 use \wiggum\foundation\Application;
 
 abstract class Router {
 	
     protected $app;
-    protected $registeredMiddleware;
-    protected $registeredfilters;
     
 	/**
 	 * 
-	 * @param array $app
+	 * @param Application $app
 	 */
 	public function __construct(Application $app) {
 		$this->app = $app;
 	}
-
+	
 	/**
 	 * 
-	 * @param string $name
-	 * @param \Closure $closure
+	 * @param array $methods
+	 * @param string $pattern
+	 * @param mixed $handler
 	 */
-	public function registerMiddleware($name, $closure) {
-	    $this->registeredMiddleware[$name] = $closure;
-	}
+	abstract public function map($methods, $pattern, $handler);
 	
 	/**
-	 *
-	 * @param string $name
-	 * @param \Closure $closure
+	 * 
+	 * @param Request $request
 	 */
-	public function registerFilter($name, $closure) {
-	    $this->registeredfilters[$name] = $closure;
-	}
+	abstract public function dispatch(Request $request);
 	
-	abstract public function map($methods, $pattern, $handler);
-	abstract public function process(Request $request, Response $response);
-
+	/**
+	 * 
+	 */
+	abstract public function process();
+	
 }
 ?>

@@ -49,28 +49,28 @@ class Kernel {
 	 */
 	private function process(Request $request, Response $response) {
         try {
-
-            $router = $this->app->getContainer()->offsetGet('router');
-            $actions = $router->process($request, $response);
-             
-            $actions = $this->preProcessRoute($actions);
-            
-		    $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($actions) {
-			   
-		        $response = $this->executeRoute($actions, $request, $response);
-			    $response = $next($request, $response);
-				
-				return $response;
-			});
-
-			$response = $this->callMiddlewareStack($request, $response);
-		} catch (Exception $e) {
-			$response = $this->handleException($e, $request, $response);
-		} catch (Throwable $e) {
-			$response = $this->handlePhpError($e, $request, $response);
-		}
-	
-		return $response;
+	        
+	        $router = $this->app->getContainer()->offsetGet('router');
+	        $router->dispatch($request);
+	        
+	        $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($router) {
+	            
+	            $actions = $router->process();
+	            
+	            $response = $this->executeRoute($actions, $request, $response);
+	            $response = $next($request, $response);
+	            
+	            return $response;
+	        });
+	            
+	        $response = $this->callMiddlewareStack($request, $response);
+	    } catch (Exception $e) {
+	        $response = $this->handleException($e, $request, $response);
+	    } catch (Throwable $e) {
+	        $response = $this->handlePhpError($e, $request, $response);
+	    }
+	    
+	    return $response;
 	}
 	
 	/**
@@ -86,30 +86,6 @@ class Kernel {
 	
 		return $response;
 	}
-	
-	/**
-	 * 
-	 * @param array $actions
-	 * @return array
-	 */
-	private function preProcessRoute($actions) {
-	    
-	    //apply fitlers
-	    $filters = isset($actions['filters']) ? $actions['filters'] : [];
-	    foreach ($filters as $filter) {
-	        $actions = $filter($actions);
-	    }
-	    
-	    //add addtional routes
-	    if (isset($actions['middleware']) && is_array($actions['middleware']) && !empty($actions['middleware'])) {
-	        foreach ($actions['middleware'] as $middleware) {
-	            $this->app->addMiddleware($middleware);
-	        }
-	    }
-	    
-	    return $actions;
-	}
-	
 	
 	/**
 	 * 
@@ -163,9 +139,9 @@ class Kernel {
 	 * @throws PageNotFoundException
 	 * @return Response
 	 */
-	private function executeRoute($actions, Request $request, Response $response) {
+	private function executeRoute(array $actions, Request $request, Response $response) {
 	    
-	    if (!isset($actions))
+	    if (empty($actions))
 	        throw new PageNotFoundException();
 	        
         if (!isset($actions['classPath']))
