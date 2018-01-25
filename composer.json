@@ -1,8 +1,9 @@
 {
-	"name": "wiggum/framework",
-	"type": "library",
-	"license": "Apache",
-	"autoload": {
-		"psr-4": {"wiggum\\": "src/"}
+	"name" : "wiggum/framework",
+	"type" : "library",
+	"autoload" : {
+		"psr-4" : {
+			"wiggum\\" : "src/"
+		}
 	}
 }
