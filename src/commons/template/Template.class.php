@@ -13,7 +13,7 @@ class Template {
 	
 	protected $functions = array();
 	
-	private $vars = array();
+	protected $vars = array();
 	
 	/**
 	 *
