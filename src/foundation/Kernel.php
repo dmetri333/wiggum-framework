@@ -51,11 +51,10 @@ class Kernel {
         try {
 	        
 	        $router = $this->app->getContainer()->offsetGet('router');
-	        $router->dispatch($request);
+	        $router->initialize();
+	        $actions = $router->process($request);
 	        
-	        $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($router) {
-	            
-	            $actions = $router->process();
+	        $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($actions) {
 	            
 	            $response = $this->executeRoute($actions, $request, $response);
 	            $response = $next($request, $response);

@@ -26,14 +26,14 @@ abstract class Router {
 	
 	/**
 	 * 
-	 * @param Request $request
 	 */
-	abstract public function dispatch(Request $request);
+	abstract public function initialize();
 	
 	/**
 	 * 
+	 * @param Request $request
 	 */
-	abstract public function process();
+	abstract public function process(Request $request);
 	
 }
 ?>
