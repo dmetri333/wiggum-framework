@@ -26,14 +26,9 @@ abstract class Router {
 	
 	/**
 	 * 
-	 */
-	abstract public function initialize();
-	
-	/**
-	 * 
 	 * @param Request $request
 	 */
-	abstract public function process(Request $request);
+	abstract public function process($route);
 	
 }
 ?>
