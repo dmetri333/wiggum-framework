@@ -11,3 +11,7 @@ $ composer require wiggum/framework
 ```
 
 This will install Wiggum and all required dependencies. Wiggum requires PHP 5.5.0 or newer.
+
+## Documentation
+
+https://wiggumphp.com/
