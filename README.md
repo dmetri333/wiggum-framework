@@ -10,7 +10,7 @@ It's recommended that you use [Composer](https://getcomposer.org/) to install Wi
 $ composer require wiggum/framework
 ```
 
-This will install Wiggum and all required dependencies. Wiggum requires PHP 5.5.0 or newer.
+This will install Wiggum and all required dependencies. Wiggum requires PHP 7.0 or newer.
 
 ## Documentation
 
