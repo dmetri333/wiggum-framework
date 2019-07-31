@@ -1,9 +1,18 @@
 {
 	"name" : "wiggum/framework",
 	"type" : "library",
+    "require-dev": {
+        "phpunit/phpunit": "^8",
+        "mikey179/vfsstream": "^1.0"
+    },
 	"autoload" : {
 		"psr-4" : {
 			"wiggum\\" : "src/"
 		}
-	}
+	},
+	"autoload-dev": {
+        "psr-4": {
+            "wiggum\\test\\": "tests/"
+        }
+    }
 }
