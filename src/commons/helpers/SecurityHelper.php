@@ -141,7 +141,7 @@ class SecurityHelper
         $str = str_replace("\t", ' ', $str);
         
         // Capture converted string for later comparison
-        $converted_string = $str;
+        $convertedString = $str;
         
         // Remove Strings that are never allowed
         $str = self::doNeverAllowed($str);
@@ -287,7 +287,7 @@ class SecurityHelper
          * code found and removed/changed during processing.
          */
         if ($isImage) {
-            return ($str === $converted_string);
+            return ($str === $convertedString);
         }
         return $str;
     }

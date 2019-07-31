@@ -303,14 +303,20 @@ class FileHelper
     public static function mimeType($file, $default = '')
     {
         $fileType = self::detectMimeType($file);
+        $fileType = empty($fileType) ? $default : $fileType;
         
-        if (!empty($fileType)) {
-            $fileType = preg_replace('/^(.+?);.*$/', '\\1', $fileType);
-            $fileType = strtolower(trim(stripslashes($fileType), '"'));
-            return $fileType;
+        $fileType = preg_replace('/^(.+?);.*$/', '\\1', $fileType);
+        $fileType = strtolower(trim(stripslashes($fileType), '"'));
+            
+        // IE will sometimes return odd mime-types during upload, so here we just standardize all
+        // jpegs or pngs to the same file type.
+        if (in_array($fileType, ['image/x-png'])) {
+            $fileType = 'image/png';
+        } else if (in_array($fileType, ['image/jpg', 'image/jpe', 'image/jpeg', 'image/pjpeg'])) {
+            $fileType = 'image/jpeg';
         }
         
-        return $default;
+        return $fileType;
     }
     
     /**
