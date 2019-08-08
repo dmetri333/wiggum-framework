@@ -24,6 +24,7 @@ abstract class Controller {
 	}
 	
 	/**
+	 * @deprecated use service $this->dictionary->get($name, $language)
 	 * 
 	 * @param string $name
 	 * @param string $language
@@ -34,6 +35,7 @@ abstract class Controller {
 	}
 	
 	/**
+	 * @deprecated use service $this->dictionary->replace($name, $replace, $language)
 	 * 
 	 * @param string $name
 	 * @param array $replace
