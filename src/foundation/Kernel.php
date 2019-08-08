@@ -5,8 +5,6 @@ use \Exception;
 use \Throwable;
 use \wiggum\http\Request;
 use \wiggum\http\Response;
-use \wiggum\foundation\Runner;
-use \wiggum\foundation\Application;
 use \wiggum\exceptions\PageNotFoundException;
 
 class Kernel {
@@ -213,11 +211,12 @@ class Kernel {
 	 * @return array
 	 */
 	private function loadConfigurationFiles($path) {
-		$files = ['app','services','dictionary'];
+	    $files = scandir($path); //['app','services','dictionary'];
 		
 		$items = [];
 		foreach ($files as $file) {
-			$items[$file] = require $path .DIRECTORY_SEPARATOR. $file .'.php';
+		    if ($file != '.' || $file != '..')
+		        $items[pathinfo($file, PATHINFO_FILENAME)] = require $path .DIRECTORY_SEPARATOR. $file;
 		}
 		return $items;
 	}

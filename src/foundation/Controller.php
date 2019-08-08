@@ -1,9 +1,8 @@
 <?php
 namespace wiggum\foundation;
 
-use \wiggum\http\Request;
-use \wiggum\http\Response;
-use \wiggum\foundation\Application;
+use wiggum\http\Request;
+use wiggum\http\Response;
 
 abstract class Controller {
 	
@@ -31,14 +30,7 @@ abstract class Controller {
 	 * @return array
 	 */
 	public function getDictionary($name, $language = null) {
-		$dictionary = $this->app->config->get('dictionary', []);
-		
-		$name = isset($language) ? $language.'.'.$name : $name;
-		if (!isset($dictionary[$name])) {
-			return null;
-		}
-		
-		return $dictionary[$name];
+	    return $this->dictionary->get($name, $language);
 	}
 	
 	/**
@@ -48,7 +40,7 @@ abstract class Controller {
 	 * @param string $language
 	 */
 	public function getDictionaryReplace($name, array $replace, $language = null) {
-		return str_replace(array_keys($replace), array_values($replace), $this->getDictionary($name, $language));
+	    return $this->dictionary->replace($name, $replace, $language);
 	}
 	
 	/**
@@ -105,4 +97,3 @@ abstract class Controller {
 	public abstract function doDefault(Request $request, Response $response);
 	
 }
-?>
