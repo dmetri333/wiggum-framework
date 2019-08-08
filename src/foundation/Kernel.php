@@ -212,13 +212,14 @@ class Kernel {
 	 */
 	private function loadConfigurationFiles($path) {
 	    $files = scandir($path); //['app','services','dictionary'];
-		
-		$items = [];
-		foreach ($files as $file) {
-		    if ($file != '.' || $file != '..')
-		        $items[pathinfo($file, PATHINFO_FILENAME)] = require $path .DIRECTORY_SEPARATOR. $file;
-		}
-		return $items;
+	    
+	    $items = [];
+	    foreach ($files as $file) {
+	        if ($file != '.' && $file != '..') {
+	            $items[pathinfo($file, PATHINFO_FILENAME)] = require $path .DIRECTORY_SEPARATOR. $file;
+	        }
+	    }
+	    return $items;
 	}
 	
 }
