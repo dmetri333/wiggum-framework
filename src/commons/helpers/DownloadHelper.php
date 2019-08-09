@@ -10,7 +10,7 @@ class DownloadHelper
      * @param string $data
      * @param string $setMime
      */
-    public static function force($filename = '', $data = '', $setMime = false, $charset = 'UTF-8')
+    public static function force($filename = '', $data = null, $setMime = false, $charset = 'UTF-8')
     {
         if ($filename === '' || $data === '') {
             return;
