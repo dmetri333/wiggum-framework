@@ -3,6 +3,11 @@ namespace wiggum\commons\util;
 
 use \DateTime;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 class Date {
 
 	/**

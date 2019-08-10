@@ -48,21 +48,20 @@ class Kernel {
 	private function process(Request $request, Response $response) {
         try {
 	        
-	        $router = $this->app->getContainer()->offsetGet('router');
-	        
-	        $route = $router->lookup($request);
-	        $route = $router->preProcess($route);
-	        
-	        $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($route, $router) {
+	        $route = $this->routeLookup($request);
+	        $actions = $route->process();
+           
+            $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($actions) {
 	            
-	            $actions = $router->process($route);
-	            $response = $this->executeRoute($actions, $request, $response);
+                $response = $this->executeRoute($actions, $request, $response);
 	            
 	            $response = $next($request, $response);
 	            
 	            return $response;
 	        });
-	            
+	        
+            $request->setParameters(array_merge($request->getParameters(), $route->getParameters()));
+                
 	        $response = $this->callMiddlewareStack($request, $response);
 	    } catch (Exception $e) {
 	        $response = $this->handleException($e, $request, $response);
@@ -148,20 +147,32 @@ class Kernel {
             throw new PageNotFoundException();
             
         $controller = new $actions['classPath']($this->app);
-        
-        if (isset($actions['parameters'])) {
-            $request->setParameters(array_merge($request->getParameters(), $actions['parameters']));
-        }
-        
-        if (isset($actions['properties'])) {
-            foreach ($actions['properties'] as $property => $value) {
-                $controller->{$property} = $value;
-            }
-        }
-        
+    
         $method = isset($actions['method']) && method_exists($controller, $actions['method']) ? $actions['method'] : 'doDefault';
         return $controller->$method($request, $response);
 	}
+	
+	/**
+	 * 
+	 * @param Request $request
+	 * @return objectt
+	 */
+	private function routeLookup(Request $request) {
+	    
+	    // Get loaded route
+	    $router = $this->app->router;
+	    
+	    // do lookup
+	    $route = $router->lookup($request);
+	    
+	    // add routet middleware
+	    foreach ($route->getMiddleware() as $middleware) {
+	        $this->app->addMiddleware($middleware);
+	    }
+	     
+	    return $route;
+	}
+	
 	
 	/**
 	 * 

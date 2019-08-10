@@ -3,6 +3,11 @@ namespace wiggum\commons\io;
 
 use \wiggum\commons\util\File;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 class FormFileUpload {
 	
     private $fileArray;

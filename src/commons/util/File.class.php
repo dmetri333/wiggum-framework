@@ -4,6 +4,11 @@ namespace wiggum\commons\util;
 use \RecursiveDirectoryIterator;
 use \RecursiveIteratorIterator;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 class File {
 	
 	const MKDIR_MODE = 0755;

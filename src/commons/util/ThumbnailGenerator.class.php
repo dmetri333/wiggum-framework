@@ -5,6 +5,11 @@ use \Exception;
 use \wiggum\commons\imagery\ImageProcessorIM;
 use \wiggum\commons\imagery\ImageProcessorGD;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 class ThumbnailGenerator {
 	
 	private $imageProcessor;

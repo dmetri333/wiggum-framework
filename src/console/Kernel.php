@@ -8,7 +8,7 @@ use \wiggum\foundation\Application;
 class Kernel {
 
 	private $app;
-
+	
 	/**
 	 * 
 	 * @param Application $app
@@ -20,7 +20,7 @@ class Kernel {
 		$this->app->loadEnvironment();
 		$this->app->loadBootFiles();
 	}
-	
+
 	/**
 	 * 
 	 * @return string

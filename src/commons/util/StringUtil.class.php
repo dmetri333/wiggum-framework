@@ -1,6 +1,11 @@
 <?php
 namespace wiggum\commons\util;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 class StringUtil {
 	
 	/**

@@ -98,12 +98,12 @@ class Configuration {
 	
 	/**
 	 *
-	 * @param  array   $array
-	 * @param  string  $key
-	 * @param  mixed   $value
+	 * @param array $array
+	 * @param string $key
+	 * @param mixed $value
 	 * @return array
 	 */
-	private function doSet(&$array, $key, $value) {
+	private function doSet(array &$array, $key, $value) {
 		if (is_null($key)) {
 			return $array = $value;
 		}

@@ -14,4 +14,3 @@ class InternalErrorException extends Exception {
 	}
 	
 }
-?>

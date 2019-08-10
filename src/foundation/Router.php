@@ -2,7 +2,6 @@
 namespace wiggum\foundation;
 
 use \wiggum\http\Request;
-use \wiggum\foundation\Application;
 
 abstract class Router {
 	
@@ -31,4 +30,3 @@ abstract class Router {
 	abstract public function process($route);
 	
 }
-?>
