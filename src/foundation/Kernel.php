@@ -155,7 +155,7 @@ class Kernel {
 	/**
 	 * 
 	 * @param Request $request
-	 * @return objectt
+	 * @return object
 	 */
 	private function routeLookup(Request $request) {
 	    
