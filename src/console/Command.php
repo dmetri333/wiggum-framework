@@ -11,7 +11,8 @@ abstract class Command {
      * 
      * @param Application $app
      */
-    public function __construct(Application $app) {
+    public function __construct(Application $app)
+    {
         $this->app = $app;
     }
     
@@ -19,10 +20,11 @@ abstract class Command {
      * Calling a non-existant var on Controller checks to see if there's an item
      * in the container that is callable and if so, calls it.
      *
-     * @param string $method
+     * @param string $name
      * @return mixed
      */
-    public function __get($name) {
+    public function __get(string $name)
+    {
         if ($this->app->getContainer()->offsetExists($name)) {
             $obj = $this->app->getContainer()->offsetGet($name);
             return $obj;

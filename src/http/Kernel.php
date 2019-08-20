@@ -11,7 +11,7 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 * 
 	 * @return Response
 	 */
-	public function run() : Response
+	public function run()
 	{
 		$request = $this->buildRequest();
 		$response = new Response();

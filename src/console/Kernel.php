@@ -3,30 +3,15 @@ namespace wiggum\console;
 
 use \Exception;
 use \Throwable;
-use \wiggum\foundation\Application;
 
-class Kernel {
-
-	private $app;
-	
-	/**
-	 * 
-	 * @param Application $app
-	 */
-	public function __construct(Application $app) {
-		$this->app = $app;
-		
-		$this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
-		$this->app->loadEnvironment();
-		$this->app->loadBootFiles();
-	}
+class Kernel extends \wiggum\foundation\Kernel {
 
 	/**
 	 * 
 	 * @return string
 	 */
-	public function run() {
-	   
+	public function run()
+	{
 	    $response = $this->process();
 	
 		$this->respond($response);
@@ -38,7 +23,8 @@ class Kernel {
 	 * @throws \RuntimeException
 	 * @return string
 	 */
-	private function process() {
+	private function process() : string
+	{
 	    global $argv;
 	    
 	    try {
@@ -81,26 +67,10 @@ class Kernel {
 	 * 
 	 * @param string $response
 	 */
-	private function respond($response) {
+	private function respond(string $response) : void
+	{
 		echo $response;
 		echo "\n";
-	}
-	
-	/**
-	 *
-	 * @param string $path
-	 
-	 * @return array
-	 */
-	private function loadConfigurationFiles($path) {
-	    $files = scandir($path);
-	    
-	    $items = [];
-	    foreach ($files as $file) {
-	        if ($file != '.' && $file != '..')
-	            $items[pathinfo($file, PATHINFO_FILENAME)] = require $path .DIRECTORY_SEPARATOR. $file;
-	    }
-	    return $items;
 	}
 	
 }
