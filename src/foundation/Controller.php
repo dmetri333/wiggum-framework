@@ -105,6 +105,6 @@ abstract class Controller {
 	 * @param Request $request
 	 * @param Response $response
 	 */
-	public abstract function doDefault(Request $request, Response $response) : Response;
+	public abstract function doDefault(Request $request, Response $response);
 	
 }

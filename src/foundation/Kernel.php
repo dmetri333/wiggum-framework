@@ -3,7 +3,7 @@ namespace wiggum\foundation;
 
 abstract class Kernel {
 
-	private $app;
+	protected $app;
 
 	/**
 	 * Start the engine

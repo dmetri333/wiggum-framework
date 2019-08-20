@@ -33,7 +33,7 @@ class Runner {
 	 * @param callable $entry
 	 * @return Response
 	 */
-	protected function resolve(callable $entry)
+	protected function resolve(?callable $entry)
 	{
 		
 		if (!$entry) {
