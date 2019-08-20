@@ -7,8 +7,10 @@ class ForbiddenException extends Exception {
 	
 	/**
 	 * 
+	 * @param string $message
 	 */
-	public function __construct($message = null) {
+	public function __construct(string $message = null)
+	{
 		parent::__construct($message, 403);
 		header('HTTP/1.1 403 Forbidden');
 	}

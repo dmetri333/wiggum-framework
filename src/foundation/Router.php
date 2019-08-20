@@ -11,7 +11,8 @@ abstract class Router {
 	 * 
 	 * @param Application $app
 	 */
-	public function __construct(Application $app) {
+	public function __construct(Application $app)
+	{
 		$this->app = $app;
 	}
 	
@@ -21,12 +22,12 @@ abstract class Router {
 	 * @param string $pattern
 	 * @param mixed $handler
 	 */
-	abstract public function map($methods, $pattern, $handler);
+	abstract public function map(array $methods, string $pattern, $handler) : Route;
 	
 	/**
 	 * 
 	 * @param Request $request
 	 */
-	abstract public function process($route);
+	abstract public function lookup(Request $request) : Route;
 	
 }

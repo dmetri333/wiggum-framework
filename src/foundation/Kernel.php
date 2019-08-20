@@ -12,10 +12,12 @@ class Kernel {
 	private $app;
 
 	/**
-	 * start the engine
-	 *
+	 * Start the engine
+	 * 
+	 * @param Application $app
 	 */
-	public function __construct(Application $app) {
+	public function __construct(Application $app)
+	{
 		$this->app = $app;
 		
 		$this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
@@ -27,7 +29,8 @@ class Kernel {
 	 * 
 	 * @return Response
 	 */
-	public function run() {
+	public function run() : Response
+	{
 		$request = $this->buildRequest();
 		$response = new Response();
 	
@@ -42,15 +45,15 @@ class Kernel {
 	 * 
 	 * @param Request $request
 	 * @param Response $response
-	 * 
 	 * @return Response
 	 */
-	private function process(Request $request, Response $response) {
+	private function process(Request $request, Response $response) : Response
+	{
         try {
 	        
-	        $route = $this->routeLookup($request);
+	        $route = $this->lookupRoute($request);
 	        $actions = $route->process();
-           
+	        
             $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($actions) {
 	            
                 $response = $this->executeRoute($actions, $request, $response);
@@ -73,13 +76,13 @@ class Kernel {
 	}
 	
 	/**
-	 *
+	 * 
 	 * @param Request $request
 	 * @param Response $response
-	 *
 	 * @return Response
 	 */
-	private function callMiddlewareStack(Request $request, Response $response) {
+	private function callMiddlewareStack(Request $request, Response $response) : Response
+	{
 		$runner = new Runner($this->app->getMiddleware());
 		$response = $runner($request, $response);
 	
@@ -90,7 +93,8 @@ class Kernel {
 	 * 
 	 * @return Request
 	 */
-	private function buildRequest() {
+	private function buildRequest() : Request
+	{
 		$request = new Request();
 		$request->setRequestURI($_SERVER['REQUEST_URI']);
 		$request->setServerName($_SERVER['SERVER_NAME']);
@@ -109,7 +113,8 @@ class Kernel {
 	 * 
 	 * @param Response $response
 	 */
-	private function respond(Response $response) {
+	private function respond(Response $response) : void
+	{
 		$redirect = $response->getRedirect();
 		if (isset($redirect)) {
 			header('location: ' . $response->getRedirect());
@@ -132,14 +137,35 @@ class Kernel {
 	
 	/**
 	 *
+	 * @param Request $request
+	 * @return Route
+	 */
+	private function lookupRoute(Request $request) : Route
+	{
+	    // Get loaded router
+	    $router = $this->app->router;
+	    
+	    // do lookup
+	    $route = $router->lookup($request);
+	    
+	    // add route middleware
+	    foreach ($route->getMiddleware() as $middleware) {
+	        $this->app->addMiddleware($middleware);
+	    }
+	    
+	    return $route;
+	}
+	
+	/**
+	 *
 	 * @param array $actions
 	 * @param Request $request
 	 * @param Response $response
 	 * @throws PageNotFoundException
 	 * @return Response
 	 */
-	private function executeRoute(array $actions, Request $request, Response $response) {
-	    
+	private function executeRoute(array $actions, Request $request, Response $response) : Response
+	{
 	    if (empty($actions))
 	        throw new PageNotFoundException();
 	        
@@ -148,42 +174,26 @@ class Kernel {
             
         $controller = new $actions['classPath']($this->app);
     
+        if (isset($actions['properties'])) {
+            foreach ($actions['properties'] as $property => $value) {
+                $controller->{$property} = $value;
+            }
+        }
+        
         $method = isset($actions['method']) && method_exists($controller, $actions['method']) ? $actions['method'] : 'doDefault';
         return $controller->$method($request, $response);
 	}
 	
 	/**
 	 * 
-	 * @param Request $request
-	 * @return object
-	 */
-	private function routeLookup(Request $request) {
-	    
-	    // Get loaded route
-	    $router = $this->app->router;
-	    
-	    // do lookup
-	    $route = $router->lookup($request);
-	    
-	    // add routet middleware
-	    foreach ($route->getMiddleware() as $middleware) {
-	        $this->app->addMiddleware($middleware);
-	    }
-	     
-	    return $route;
-	}
-	
-	
-	/**
-	 * 
 	 * @param  Exception $e
 	 * @param  Request $request
 	 * @param  Response $response
-	 * 
-	 * @return Response
 	 * @throws Exception
+	 * @return mixed
 	 */
-	private function handleException(Exception $e, Request $request, Response $response) {
+	private function handleException(Exception $e, Request $request, Response $response)
+	{
 		if ($this->app->getContainer()->offsetExists('exceptionHandler')) {
 			$callable = $this->app->getContainer()->offsetGet('exceptionHandler');
 			// Call the registered handler
@@ -199,11 +209,11 @@ class Kernel {
 	 * @param  Throwable $e
 	 * @param  Request $request
 	 * @param  Response $response
-	 * 
-	 * @return Response
 	 * @throws Throwable
+	 * @return mixed
 	 */
-	private function handlePhpError(Throwable $e, Request $request, Response $response) {
+	private function handlePhpError(Throwable $e, Request $request, Response $response)
+	{
 		if ($this->app->getContainer()->offsetExists('errorHandler')) {
 			$callable = $this->app->getContainer()->offsetGet('errorHandler');
 			// Call the registered handler
@@ -218,10 +228,10 @@ class Kernel {
 	/**
 	 * 
 	 * @param string $path
-
 	 * @return array
 	 */
-	private function loadConfigurationFiles($path) {
+	private function loadConfigurationFiles(string $path) : array
+	{
 	    $files = scandir($path); //['app','services','dictionary'];
 	    
 	    $items = [];
