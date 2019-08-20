@@ -4,6 +4,7 @@ namespace wiggum\http;
 use \Exception;
 use \Throwable;
 use \wiggum\exceptions\PageNotFoundException;
+use \wiggum\http\interfaces\Route;
 
 class Kernel extends \wiggum\foundation\Kernel {
 	
