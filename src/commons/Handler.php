@@ -5,10 +5,6 @@ use \wiggum\http\Request;
 
 abstract class Handler {
 	
-	/**
-	 *
-	 * @var array
-	 */
 	protected $knownContentTypes = [ 
 			'application/json',
 			'application/xml',
@@ -21,7 +17,8 @@ abstract class Handler {
 	 * @param Request $request        	
 	 * @return string
 	 */
-	protected function determineContentType(Request $request) {
+	protected function determineContentType(Request $request) : string
+	{
 		$acceptHeader = $request->getHeader('Accept');
 		$selectedContentTypes = array_intersect(explode(',', $acceptHeader), $this->knownContentTypes);
 		
@@ -47,7 +44,8 @@ abstract class Handler {
 	 *
 	 * @return void
 	 */
-	protected function writeToErrorLog($throwable) {
+	protected function writeToErrorLog($throwable) : void
+	{
 		$message = 'Wiggum Application Error:' . PHP_EOL;
 	
 		$message .= $this->renderErrorAsText($throwable);
@@ -66,7 +64,8 @@ abstract class Handler {
 	 *
 	 * @return string
 	 */
-	protected function renderErrorAsText($error) {
+	protected function renderErrorAsText($error) : string
+	{
 		$text = sprintf('Type: %s' . PHP_EOL, get_class($error));
 	
 		if ($code = $error->getCode()) {
@@ -95,10 +94,10 @@ abstract class Handler {
 	/**
 	 * Wraps the error_log function so that this can be easily tested
 	 *
-	 * @param
-	 *        	$message
+	 * @param string $message
 	 */
-	protected function logError($message) {
+	protected function logError(string $message) : void
+	{
 		error_log($message);
 	}
 

@@ -1,7 +1,7 @@
 <?php
-namespace wiggum\foundation;
+namespace wiggum\http;
 
-use \wiggum\http\Request;
+use wiggum\foundation\Application;
 
 abstract class Router {
 	

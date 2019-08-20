@@ -11,7 +11,7 @@ class FileHelper
      * @param string $mode
      * @return boolean
      */
-    public static function write($path, $data, $mode = 'wb')
+    public static function write(string $path, string $data, $mode = 'wb') : bool
     {
         if (!$fp = @fopen($path, $mode)) {
             return false;
@@ -35,10 +35,10 @@ class FileHelper
      * 
      * @param string $path
      * @param boolean $recursive
-     * @param number $mode
+     * @param int $mode
      * @return boolean
      */
-    public static function createFolder($source, $recursive = true, $mode = 0770)
+    public static function createFolder(string $source, bool $recursive = true, int $mode = 0770) : bool
     {
         if (file_exists($source)) {
             return true;
@@ -58,7 +58,7 @@ class FileHelper
      * @param string $target
      * @return boolean
      */
-    public static function move($source, $target)
+    public static function move(string $source, string $target) : bool
     {
         if (file_exists($target)) {
             return false;
@@ -82,7 +82,7 @@ class FileHelper
      * @param boolean $overwrite
      * @return boolean
      */
-    public static function copy($source, $target, $overwrite = false)
+    public static function copy(string $source, string $target, $overwrite = false) : bool
     {
         
         if (!file_exists($source)) {
@@ -122,7 +122,7 @@ class FileHelper
      * @param boolean $recursive
      * @return boolean
      */
-    public static function delete($source, $recursive = false)
+    public static function delete(string $source, bool $recursive = false) : bool
     {
         if (!file_exists($source)) {
             return false;
@@ -153,11 +153,12 @@ class FileHelper
     /**
      * 
      * @param string $source
-     * @param integer $depth
-     * @param boolean $hidden
-     * @return array
+     * @param int $depth
+     * @param bool $hidden
+     * @return mixed
      */
-    public static function directoryList($source, $depth = 0, $hidden = false) {
+    public static function directoryList(string $source, int $depth = 0, bool $hidden = false)
+    {
         if ($fp = @opendir($source)) {
             
             $filedata = [];
@@ -194,9 +195,10 @@ class FileHelper
     /**
      * 
      * @param string $source
-     * @return integer
+     * @return int
      */
-    public static function size($source) {
+    public static function size(string $source) : int
+    {
         
         if (is_file($source)) {
             return filesize($source);
@@ -220,7 +222,7 @@ class FileHelper
      * @param array $returnedValues
      * @return boolean|array
      */
-    public static function fileInfo($file, $returnedValues = ['name', 'path', 'size', 'date'])
+    public static function fileInfo(string $file, $returnedValues = ['name', 'path', 'size', 'date'])
     {
         if (!file_exists($file)) {
             return false;
@@ -265,7 +267,7 @@ class FileHelper
      * @param int $bytes
      * @return string
      */
-    public static function formatBytes($bytes)
+    public static function formatBytes(int $bytes) : string
     {
         $result = (float) $bytes;
         if ($bytes >= 1048576) {
@@ -283,7 +285,7 @@ class FileHelper
      * @param string $filename
      * @return string
      */
-    public static function extension($filename)
+    public static function extension(string $filename) : string
     {
         $x = explode('.', $filename);
         
@@ -300,7 +302,7 @@ class FileHelper
      * @param string $default
      * @return string
      */
-    public static function mimeType($file, $default = '')
+    public static function mimeType(string $file, string $default = '') : string
     {
         $fileType = self::detectMimeType($file);
         $fileType = empty($fileType) ? $default : $fileType;
@@ -322,9 +324,9 @@ class FileHelper
     /**
      * 
      * @param string $file
-     * @return boolean
+     * @return mixed
      */
-    private static function detectMimeType($file)
+    private static function detectMimeType(string $file)
     {
         // We'll need this to validate the MIME info string (e.g. text/plain; charset=us-ascii)
         $regexp = '/^([a-z\-]+\/[a-z0-9\-\.\+]+)(;\s.+)?$/';
@@ -433,9 +435,9 @@ class FileHelper
     /**
      *
      * @param string $file
-     * @return boolean
+     * @return bool
      */
-    public static function isWritable($file)
+    public static function isWritable(string $file) : bool
     {
         // If we're on a UNIX-like server, just is_writable()
         if (DIRECTORY_SEPARATOR === '/') {

@@ -9,7 +9,7 @@ class InflectorHelper
      * @param string $str
      * @return string
      */
-    public static function singular($str)
+    public static function singular(string $str) : string
     {
         $result = strval($str);
         if (!self::wordCountable($result)) {
@@ -63,7 +63,7 @@ class InflectorHelper
      * @param string $str
      * @return string
      */
-    public static function plural($str)
+    public static function plural(string $str) : string
     {
         $result = strval($str);
         if (!self::wordCountable($result)) {
@@ -106,9 +106,9 @@ class InflectorHelper
     /**
      * 
      * @param string $word
-     * @return boolean
+     * @return bool
      */
-    public static function wordCountable($word)
+    public static function wordCountable(string $word) : bool
     {
         return !in_array(
             strtolower($word), [
@@ -151,7 +151,7 @@ class InflectorHelper
      * @param string $number
      * @return string
      */
-    public static function ordinalFormat($number)
+    public static function ordinalFormat(string $number) : string
     {
         if (!ctype_digit((string) $number) || $number < 1) {
             return $number;

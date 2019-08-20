@@ -5,12 +5,13 @@ class DownloadHelper
 {
     
     /**
-     *
+     * 
      * @param string $filename
      * @param string $data
-     * @param string $setMime
+     * @param bool $setMime
+     * @param string $charset
      */
-    public static function force($filename = '', $data = '', $setMime = false, $charset = 'UTF-8')
+    public static function force(string $filename = '', string $data = '', bool $setMime = false, string $charset = 'UTF-8')
     {
         if ($filename === '' || $data === '') {
             return;
@@ -99,7 +100,7 @@ class DownloadHelper
      * @param string $encoding
      * @return string|boolean
      */
-    private static function convertToUtf8($str, $encoding)
+    private static function convertToUtf8(string $str, string $encoding)
     {
         if (extension_loaded('mbstring')) {
             return mb_convert_encoding($str, 'UTF-8', $encoding);

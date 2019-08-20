@@ -6,10 +6,10 @@ class URLHelper
 
     /**
      * @param string $str
-     * @param boolean $popup
+     * @param bool $popup
      * @return string
      */
-    public static function autoLink($str, $popup = false)
+    public static function autoLink(string $str, bool $popup = false) : string
     {
         
         // Find and replace any URLs.
@@ -44,18 +44,21 @@ class URLHelper
 
 
     /**
+     * 
      * @param string $str
      * @param string $separator
-     * @param boolean $lowercase
+     * @param bool $lowercase
+     * @param bool $utf8
      * @return string
      */
-    public static function slug($str, $separator = '-', $lowercase = true, $utf8 = true) {
+    public static function slug(string $str, string $separator = '-', bool $lowercase = true, bool $utf8 = true) : string
+    {
  
         $q_separator = preg_quote($separator, '#');
         $trans = [
-            '&.+?;'			=> '',
-            '[^\w\d _-]'		=> '',
-            '\s+'			=> $separator,
+            '&.+?;'			        => '',
+            '[^\w\d _-]'		    => '',
+            '\s+'			        => $separator,
             '('.$q_separator.')+'	=> $separator
         ];
         
@@ -78,7 +81,7 @@ class URLHelper
      * @param string $attributes
      * @return string
      */
-    private static function mailto($email, $title = '', $attributes = '')
+    private static function mailto(string $email, string $title = '', string $attributes = '') : string
     {
         $title = (string) $title;
         if ($title === '') {
@@ -92,9 +95,9 @@ class URLHelper
      * 
      * @param string $attributes
      * @param boolean $js
-     * @return NULL|string
+     * @return string
      */
-    private static function stringifyAttributes($attributes, $js = false)
+    private static function stringifyAttributes(string $attributes, bool $js = false) : ?string
     {
         $atts = null;
         if (empty($attributes)) {

@@ -12,8 +12,9 @@ class TextHelper
      * @param string ellipsis
      * @return string
      */
-    public static function ellipsize($string, $max, $position = 1, $ellipsis = '&hellip;')
+    public static function ellipsize(string $string, int $max, float $position = 1, string $ellipsis = '&hellip;') : string
     {
+        
         // Strip tags
         $string = trim(strip_tags($string));
         
@@ -25,7 +26,7 @@ class TextHelper
         $begin = mb_substr($string, 0, floor($max * $position));
         $position = ($position > 1) ? 1 : $position;
         
-        if ($position === 1) {
+        if ((int) $position === 1) {
             $end = mb_substr($string, 0, -($max - mb_strlen($begin)));
         } else {
             $end = mb_substr($string, -($max - mb_strlen($begin)));
@@ -39,10 +40,10 @@ class TextHelper
      *
      * Converts high ASCII text and MS Word special characters to character entities
      *
-     * @param	string	$str
-     * @return	string
+     * @param string $str
+     * @return string
      */
-    public static function asciiToEntities($str)
+    public static function asciiToEntities(string $str) : string
     {
         $out = '';
         $length = defined('MB_OVERLOAD_STRING') ? mb_strlen($str, '8bit') - 1 : strlen($str) - 1;
@@ -87,11 +88,11 @@ class TextHelper
      *
      * Converts character entities back to ASCII
      *
-     * @param	string
-     * @param	bool
-     * @return	string
+     * @param string
+     * @param bool
+     * @return string
      */
-    public static function entitiesToAscii($str, $all = true)
+    public static function entitiesToAscii(string $str, bool $all = true) : string
     {
         if (preg_match_all('/\&#(\d+)\;/', $str, $matches)) {
             for ($i = 0, $s = count($matches[0]); $i < $s; $i++) {
@@ -116,7 +117,5 @@ class TextHelper
         
         return $str;
     }
-   
-    
     
 }

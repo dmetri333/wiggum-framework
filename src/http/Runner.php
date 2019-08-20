@@ -1,8 +1,5 @@
 <?php
-namespace wiggum\foundation;
-
-use \wiggum\http\Request;
-use \wiggum\http\Response;
+namespace wiggum\http;
 
 class Runner {
 
@@ -11,18 +8,20 @@ class Runner {
 	/**
 	 * 
 	 * @param array $queue
-	 * @param callable $resolver
 	 */
-	public function __construct(array $queue) {
+	public function __construct(array $queue)
+	{
 		$this->queue = $queue;
 	}
 
 	/**
 	 * 
-	 * @param \wiggum\http\Request $request
-	 * @param \wiggum\http\Response $response
+	 * @param Request $request
+	 * @param Response $response
+	 * @return Response
 	 */
-	public function __invoke(Request $request, Response $response) {
+	public function __invoke(Request $request, Response $response) : Response
+	{
 		$entry = array_shift($this->queue);
 		$middleware = $this->resolve($entry);
 		
@@ -31,10 +30,11 @@ class Runner {
 
 	/**
 	 *
-	 * @param mixed $entry
-	 * @return \wiggum\http\Response
+	 * @param callable $entry
+	 * @return Response
 	 */
-	protected function resolve($entry) {
+	protected function resolve(callable $entry)
+	{
 		
 		if (!$entry) {
 			// the default callable when the queue is empty

@@ -15,9 +15,11 @@ class Application {
 
 	/**
 	 * Create new application
-	 *
+	 * 
+	 * @param string $basePath
 	 */
-	public function __construct($basePath) {
+	public function __construct(string $basePath)
+	{
 		$this->setBasePath($basePath);
 		
 		$this->container = new Container();
@@ -27,17 +29,19 @@ class Application {
 	/**
 	 * 
 	 * @param string $name
-	 * @param mixed $service
+	 * @param callable $service
 	 */
-	public function addService($name, $service) {
+	public function addService(string $name, callable $service) : void
+	{
 		$this->container[$name] = $service;
 	}
 	
 	/**
 	 *
-	 * @param mixed $middlewaree
+	 * @param callable $middlewaree
 	 */
-	public function addMiddleware($middleware) {
+	public function addMiddleware(callable $middleware) : void
+	{
 		$this->middleware[] = $middleware;
 	}
 	
@@ -46,14 +50,16 @@ class Application {
 	 *
 	 * @return Container
 	 */
-	public function getContainer() {
+	public function getContainer() : Container
+	{
 		return $this->container;
 	}
 	
 	/**
 	 *
 	 */
-	public function getMiddleware() {
+	public function getMiddleware() : array
+	{
 		return $this->middleware;
 	}
 	
@@ -61,16 +67,18 @@ class Application {
 	 * 
 	 * @return string
 	 */
-	public function getBasePath() {
+	public function getBasePath() : string
+	{
 		return $this->basePath;
 	}
 	
 	/**
 	 * Set the base path for the application.
 	 *
-	 * @param  string  $basePath
+	 * @param string $basePath
 	 */
-	public function setBasePath($basePath) {
+	public function setBasePath(string $basePath) : void
+	{
 		$this->basePath  = rtrim($basePath, '\/');
 	}
 	
@@ -78,14 +86,16 @@ class Application {
 	 * 
 	 * @param array $config
 	 */
-	public function loadConfig(array $config) {
+	public function loadConfig(array $config) : void
+	{
 		$this->config = new Configuration($config);
 	}
 	
 	/**
 	 * 
 	 */
-	public function loadBootFiles() {
+	public function loadBootFiles() : void
+	{
 		$app = $this;
 	
 		$bootFiles = $this->config->get('app.boot');
@@ -97,7 +107,8 @@ class Application {
 	/**
 	 *
 	 */
-	public function loadEnvironment() {
+	public function loadEnvironment() : void
+	{
 		date_default_timezone_set($this->config->get('app.timezone', 'UTC'));
 		
 		mb_internal_encoding('UTF-8');
@@ -110,7 +121,8 @@ class Application {
 	 * @param string $method
 	 * @return mixed
 	 */
-	public function __get($name) {
+	public function __get(string $name)
+	{
 	    if ($this->container->offsetExists($name)) {
 	        $obj = $this->container->offsetGet($name);
 	        return $obj;

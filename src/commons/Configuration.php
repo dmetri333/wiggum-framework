@@ -14,10 +14,10 @@ class Configuration {
 	
 	/**
 	 *
-	 * @param array $items        	
-	 * @return void
+	 * @param array $items
 	 */
-	public function __construct(array $items = []) {
+	public function __construct(array $items = [])
+	{
 		$this->items = $items;
 	}
 	
@@ -26,7 +26,8 @@ class Configuration {
 	 * @param string $key        	
 	 * @return bool
 	 */
-	public function has($key) {
+	public function has($key)
+	{
 		if (!$this->items) {
 			return false;
 		}
@@ -57,7 +58,8 @@ class Configuration {
 	 * @param mixed $default        	
 	 * @return mixed
 	 */
-	public function get($key, $default = null) {
+	public function get($key, $default = null)
+	{
 		if (is_null($key)) {
 			return $this->items;
 		}
@@ -84,7 +86,8 @@ class Configuration {
 	 * @param mixed $value        	
 	 * @return void
 	 */
-	public function set($key, $value = null) {
+	public function set($key, $value = null)
+	{
 		
 		if (is_array($key)) {
 			foreach ($key as $innerKey => $innerValue) {
@@ -103,7 +106,8 @@ class Configuration {
 	 * @param mixed $value
 	 * @return array
 	 */
-	private function doSet(array &$array, $key, $value) {
+	private function doSet(array &$array, $key, $value)
+	{
 		if (is_null($key)) {
 			return $array = $value;
 		}
@@ -131,7 +135,8 @@ class Configuration {
 	 *
 	 * @return array
 	 */
-	public function all() {
+	public function all()
+	{
 		return $this->items;
 	}
 	

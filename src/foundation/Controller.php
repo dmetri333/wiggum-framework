@@ -10,16 +10,19 @@ abstract class Controller {
 	
 	/**
 	 * 
+	 * @param Application $app
 	 */
-	public function __construct(Application $app) {
+	public function __construct(Application $app)
+	{
 		$this->app = $app;
 	}
 	
 	/**
 	 * 
-	 * @return \wiggum\foundation\Application
+	 * @return Application
 	 */
-	public function getApplication() {
+	public function getApplication() : Application
+	{
 		return $this->app;
 	}
 	
@@ -30,7 +33,8 @@ abstract class Controller {
 	 * @param string $language
 	 * @return array
 	 */
-	public function getDictionary($name, $language = null) {
+	public function getDictionary(string $name, string $language = null)
+	{
 	    return $this->dictionary->get($name, $language);
 	}
 	
@@ -41,7 +45,8 @@ abstract class Controller {
 	 * @param array $replace
 	 * @param string $language
 	 */
-	public function getDictionaryReplace($name, array $replace, $language = null) {
+	public function getDictionaryReplace(string $name, array $replace, string $language = null)
+	{
 	    return $this->dictionary->replace($name, $replace, $language);
 	}
 	
@@ -50,8 +55,10 @@ abstract class Controller {
 	 * @param string $classPath
 	 * @param string $method
 	 * @param Request $request
+	 * @return Response
 	 */
-	public function forward($classPath, $method = 'doDefault', Request $request = null) {
+	public function forward(string $classPath, string $method = 'doDefault', Request $request = null) : Response
+	{
 		$component = new $classPath($this->app);
 		
 		$properties = get_object_vars($this);
@@ -73,7 +80,8 @@ abstract class Controller {
 	 * @param string $method
 	 * @return mixed
 	 */
-	public function __get($name) {
+	public function __get(string $name)
+	{
 		if ($this->app->getContainer()->offsetExists($name)) {
 			$obj = $this->app->getContainer()->offsetGet($name);
 			return $obj;
@@ -85,9 +93,10 @@ abstract class Controller {
 	/**
 	 * 
 	 * @param string $name
-	 * @return mixed
+	 * @return bool
 	 */
-	public function has($name) {
+	public function has(string $name) : bool
+	{
 		return $this->app->getContainer()->offsetExists($name);
 	}
 	
@@ -96,6 +105,6 @@ abstract class Controller {
 	 * @param Request $request
 	 * @param Response $response
 	 */
-	public abstract function doDefault(Request $request, Response $response);
+	public abstract function doDefault(Request $request, Response $response) : Response;
 	
 }
