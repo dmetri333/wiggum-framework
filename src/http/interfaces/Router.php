@@ -1,6 +1,8 @@
 <?php
 namespace wiggum\http\interfaces;
 
+use \wiggum\http\Request;
+
 interface Router {
 	
 	/**
