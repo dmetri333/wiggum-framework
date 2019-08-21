@@ -20,7 +20,7 @@ class Runner {
 	 * @param Response $response
 	 * @return Response
 	 */
-	public function __invoke(Request $request, Response $response) : Response
+	public function __invoke(Request $request, Response $response): Response
 	{
 		$entry = array_shift($this->queue);
 		$middleware = $this->resolve($entry);

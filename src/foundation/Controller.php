@@ -21,7 +21,7 @@ abstract class Controller {
 	 * 
 	 * @return Application
 	 */
-	public function getApplication() : Application
+	public function getApplication(): Application
 	{
 		return $this->app;
 	}
@@ -57,7 +57,7 @@ abstract class Controller {
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function forward(string $classPath, string $method = 'doDefault', Request $request = null) : Response
+	public function forward(string $classPath, string $method = 'doDefault', Request $request = null): Response
 	{
 		$component = new $classPath($this->app);
 		
@@ -95,7 +95,7 @@ abstract class Controller {
 	 * @param string $name
 	 * @return bool
 	 */
-	public function has(string $name) : bool
+	public function has(string $name): bool
 	{
 		return $this->app->getContainer()->offsetExists($name);
 	}

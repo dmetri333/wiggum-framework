@@ -31,7 +31,7 @@ class Application {
 	 * @param string $name
 	 * @param callable $service
 	 */
-	public function addService(string $name, callable $service) : void
+	public function addService(string $name, callable $service): void
 	{
 		$this->container[$name] = $service;
 	}
@@ -40,7 +40,7 @@ class Application {
 	 *
 	 * @param callable $middlewaree
 	 */
-	public function addMiddleware(callable $middleware) : void
+	public function addMiddleware(callable $middleware): void
 	{
 		$this->middleware[] = $middleware;
 	}
@@ -50,7 +50,7 @@ class Application {
 	 *
 	 * @return Container
 	 */
-	public function getContainer() : Container
+	public function getContainer(): Container
 	{
 		return $this->container;
 	}
@@ -58,7 +58,7 @@ class Application {
 	/**
 	 *
 	 */
-	public function getMiddleware() : array
+	public function getMiddleware(): array
 	{
 		return $this->middleware;
 	}
@@ -67,7 +67,7 @@ class Application {
 	 * 
 	 * @return string
 	 */
-	public function getBasePath() : string
+	public function getBasePath(): string
 	{
 		return $this->basePath;
 	}
@@ -77,7 +77,7 @@ class Application {
 	 *
 	 * @param string $basePath
 	 */
-	public function setBasePath(string $basePath) : void
+	public function setBasePath(string $basePath): void
 	{
 		$this->basePath  = rtrim($basePath, '\/');
 	}
@@ -86,32 +86,9 @@ class Application {
 	 * 
 	 * @param array $config
 	 */
-	public function loadConfig(array $config) : void
+	public function loadConfig(array $config): void
 	{
 		$this->config = new Configuration($config);
-	}
-	
-	/**
-	 * 
-	 */
-	public function loadBootFiles() : void
-	{
-		$app = $this;
-	
-		$bootFiles = $this->config->get('app.boot');
-		foreach ($bootFiles as $bootFile) {
-			require_once $this->basePath.DIRECTORY_SEPARATOR.$bootFile;
-		}
-	}
-	
-	/**
-	 *
-	 */
-	public function loadEnvironment() : void
-	{
-		date_default_timezone_set($this->config->get('app.timezone', 'UTC'));
-		
-		mb_internal_encoding('UTF-8');
 	}
 	
 	/**

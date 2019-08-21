@@ -2,22 +2,6 @@
 namespace wiggum\foundation;
 
 abstract class Kernel {
-
-	protected $app;
-
-	/**
-	 * Start the engine
-	 * 
-	 * @param Application $app
-	 */
-	public function __construct(Application $app)
-	{
-		$this->app = $app;
-		
-		$this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
-		$this->app->loadEnvironment();
-		$this->app->loadBootFiles();
-	}
 	
 	/**
 	 * 
@@ -30,7 +14,7 @@ abstract class Kernel {
 	 * @param string $path
 	 * @return array
 	 */
-	private function loadConfigurationFiles(string $path) : array
+	protected function loadConfigurationFiles(string $path): array
 	{
 	    $files = scandir($path);
 	    
@@ -41,6 +25,28 @@ abstract class Kernel {
 	        }
 	    }
 	    return $items;
+	}
+	
+	/**
+	 * 
+	 * @param Application $app
+	 * @param array $bootFiles
+	 */
+	protected function loadBootFiles(Application $app, array $bootFiles): void
+	{
+	    foreach ($bootFiles as $bootFile) {
+	        require_once $app->basePath.DIRECTORY_SEPARATOR.$bootFile;
+	    }
+	}
+	
+	/**
+	 * 
+	 * @param Application $app
+	 */
+	protected function loadEnvironment(Application $app): void
+	{
+	    date_default_timezone_set($app->config->get('app.timezone', 'UTC'));
+	    mb_internal_encoding($app->config->get('app.encoding', 'UTF-8'));
 	}
 	
 }

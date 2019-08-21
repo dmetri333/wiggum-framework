@@ -5,9 +5,27 @@ use \Exception;
 use \Throwable;
 use \wiggum\exceptions\PageNotFoundException;
 use \wiggum\http\interfaces\Route;
+use \wiggum\foundation\Application;
 
 class Kernel extends \wiggum\foundation\Kernel {
 	
+    protected $app;
+    
+    /**
+     * Start the engine
+     *
+     * @param Application $app
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+        
+        $this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
+        
+        $this->loadEnvironment();
+        $this->loadBootFiles($this->app->config->get('app.boot', []));
+    }
+    
 	/**
 	 * 
 	 * @return Response
@@ -30,7 +48,7 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 * @param Response $response
 	 * @return Response
 	 */
-	private function process(Request $request, Response $response) : Response
+	private function process(Request $request, Response $response): Response
 	{
         try {
 	        
@@ -64,7 +82,7 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 * @param Response $response
 	 * @return Response
 	 */
-	private function callMiddlewareStack(Request $request, Response $response) : Response
+	private function callMiddlewareStack(Request $request, Response $response): Response
 	{
 		$runner = new Runner($this->app->getMiddleware());
 		$response = $runner($request, $response);
@@ -76,7 +94,7 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 * 
 	 * @return Request
 	 */
-	private function buildRequest() : Request
+	private function buildRequest(): Request
 	{
 		$request = new Request();
 		$request->setRequestURI($_SERVER['REQUEST_URI']);
@@ -96,7 +114,7 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 * 
 	 * @param Response $response
 	 */
-	private function respond(Response $response) : void
+	private function respond(Response $response): void
 	{
 		$redirect = $response->getRedirect();
 		if (isset($redirect)) {
@@ -123,7 +141,7 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 * @param Request $request
 	 * @return Route
 	 */
-	private function lookupRoute(Request $request) : Route
+	private function lookupRoute(Request $request): Route
 	{
 	    // Get loaded router
 	    $router = $this->app->router;
@@ -147,7 +165,7 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 * @throws PageNotFoundException
 	 * @return Response
 	 */
-	private function executeRoute(array $actions, Request $request, Response $response) : Response
+	private function executeRoute(array $actions, Request $request, Response $response): Response
 	{
 	    if (empty($actions))
 	        throw new PageNotFoundException();

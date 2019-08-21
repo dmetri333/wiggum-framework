@@ -3,9 +3,27 @@ namespace wiggum\console;
 
 use \Exception;
 use \Throwable;
+use \wiggum\foundation\Application;
 
 class Kernel extends \wiggum\foundation\Kernel {
 
+    protected $app;
+    
+    /**
+     * Start the engine
+     *
+     * @param Application $app
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+        
+        $this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
+        
+        $this->loadEnvironment($this->app);
+        $this->loadBootFiles($this->app, $this->app->config->get('cli.boot', []));
+    }
+    
 	/**
 	 * 
 	 * @return string
@@ -23,7 +41,7 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 * @throws \RuntimeException
 	 * @return string
 	 */
-	private function process() : string
+	private function process(): string
 	{
 	    global $argv;
 	    
@@ -67,7 +85,7 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 * 
 	 * @param string $response
 	 */
-	private function respond(string $response) : void
+	private function respond(string $response): void
 	{
 		echo $response;
 		echo "\n";
