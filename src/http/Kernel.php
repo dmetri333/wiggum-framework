@@ -53,12 +53,10 @@ class Kernel extends \wiggum\foundation\Kernel {
         try {
 	        
 	        $route = $this->lookupRoute($request);
-	        $actions = $route->process();
 	        
-            $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($actions) {
+            $this->app->addMiddleware(function(Request $request, Response $response, callable $next) use ($route) {
 	            
-                $response = $this->executeRoute($actions, $request, $response);
-	            
+                $response = $this->executeRoute($route->process(), $request, $response);
 	            $response = $next($request, $response);
 	            
 	            return $response;

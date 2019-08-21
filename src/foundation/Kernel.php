@@ -20,7 +20,7 @@ abstract class Kernel {
 	    
 	    $items = [];
 	    foreach ($files as $file) {
-	        if ($file != '.' && $file != '..') {
+	        if ($file != '.' && $file != '..' && $file[0] !== '.' && FileHelper::extension($file) == 'php') {
 	            $items[pathinfo($file, PATHINFO_FILENAME)] = require $path .DIRECTORY_SEPARATOR. $file;
 	        }
 	    }
