@@ -1,6 +1,8 @@
 <?php
 namespace wiggum\foundation;
 
+use \wiggum\commons\helpers\FileHelper;
+
 abstract class Kernel {
 	
 	/**
