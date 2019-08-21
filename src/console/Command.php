@@ -37,6 +37,6 @@ abstract class Command {
      * 
      * @param array $args
      */
-    public abstract function command(array $args);
+    public abstract function handle(array $args);
     
 }

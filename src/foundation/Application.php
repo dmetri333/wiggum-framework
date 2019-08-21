@@ -11,8 +11,8 @@ class Application {
 	
 	private $container;
 	private $middleware;
+	private $commands;
 	
-
 	/**
 	 * Create new application
 	 * 
@@ -24,6 +24,7 @@ class Application {
 		
 		$this->container = new Container();
 		$this->middleware = [];
+		$this->commands = [];
 	}
 	
 	/**
@@ -38,11 +39,20 @@ class Application {
 	
 	/**
 	 *
-	 * @param callable $middlewaree
+	 * @param callable $middleware
 	 */
 	public function addMiddleware(callable $middleware): void
 	{
 		$this->middleware[] = $middleware;
+	}
+	
+	/**
+	 *
+	 * @param string $commands
+	 */
+	public function addCommand(string $command, string $classPath): void
+	{
+	    $this->commands[$command] = $classPath;
 	}
 	
 	/**
@@ -61,6 +71,14 @@ class Application {
 	public function getMiddleware(): array
 	{
 		return $this->middleware;
+	}
+	
+	/**
+	 *
+	 */
+	public function getCommands(): array
+	{
+	    return $this->commands;
 	}
 	
 	/**

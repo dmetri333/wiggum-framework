@@ -21,7 +21,7 @@ class Kernel extends \wiggum\foundation\Kernel {
         $this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
         
         $this->loadEnvironment($this->app);
-        $this->loadBootFiles($this->app, $this->app->config->get('cli.boot', []));
+        $this->loadBootFiles($this->app, $this->app->config->get('app.cliboot', []));
     }
     
 	/**
@@ -30,6 +30,10 @@ class Kernel extends \wiggum\foundation\Kernel {
 	 */
 	public function run()
 	{
+	    if (!$this->isCli()) {
+	        throw new \RuntimeException('Command must run in cli!');
+	    }
+	    
 	    $response = $this->process();
 	
 		$this->respond($response);
@@ -53,7 +57,7 @@ class Kernel extends \wiggum\foundation\Kernel {
             $command = $argv[1];
             $args = array_slice($argv, 2);
             
-            $possibleCommands = $this->app->config->get('commands');
+            $possibleCommands = $this->app->getCommands();
             if (!array_key_exists($command, $possibleCommands)) {
                 throw new \RuntimeException('Command not found');
             }
@@ -67,11 +71,11 @@ class Kernel extends \wiggum\foundation\Kernel {
             
             $task = new $class($this->app);
             
-            if (!method_exists($task, 'command')) {
-                throw new \RuntimeException(sprintf('Class %s does not have a command() method', $class));
+            if (!method_exists($task, 'handle')) {
+                throw new \RuntimeException(sprintf('Class %s does not have a handle() method', $class));
             }
             
-            return $task->command($args);
+            return $task->handle($args);
             
 	    } catch (Exception $e) {
 	        return $e->getMessage();
@@ -89,6 +93,35 @@ class Kernel extends \wiggum\foundation\Kernel {
 	{
 		echo $response;
 		echo "\n";
+	}
+	
+	/**
+	 * 
+	 * @return bool
+	 */
+	private function isCli(): bool
+	{
+	    if (defined('STDIN')) {
+	        return true;
+	    }
+	    
+	    if (php_sapi_name() === 'cli') {
+	        return true;
+	    }
+	    
+	    if (array_key_exists('SHELL', $_ENV)) {
+	        return true;
+	    }
+	    
+	    if (empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0) {
+	        return true;
+	    }
+	    
+	    if (!array_key_exists('REQUEST_METHOD', $_SERVER)) {
+	        return true;
+	    }
+	    
+	    return false;
 	}
 	
 }
