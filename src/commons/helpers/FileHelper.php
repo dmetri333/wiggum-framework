@@ -173,13 +173,15 @@ class FileHelper
                 
                 is_dir($source.$file) && $file .= DIRECTORY_SEPARATOR;
                 
-                if (($depth < 1 || $newDepth > 0) && is_dir($source.$file)) {
-                    $info = self::fileInfo($source.$file);
+                if (is_dir($source . $file)) {
+                    $info = self::fileInfo($source . $file);
                     $info['file'] = false;
-                    $info['children'] = self::directoryList($source.$file, $newDepth, $hidden);;
+                    if ($depth < 1 || $newDepth > 0) {
+                        $info['children'] = self::directoryList($source . $file, $newDepth, $hidden);
+                    }
                     $filedata[] = $info;
                 } else {
-                    $info = self::fileInfo($source.$file); 
+                    $info = self::fileInfo($source . $file);
                     $info['file'] = true;
                     $filedata[] =  $info;
                 }
