@@ -9,7 +9,7 @@ class URLHelper
      * @param bool $popup
      * @return string
      */
-    public static function autoLink(string $str, bool $popup = false) : string
+    public static function autoLink(string $str, bool $popup = false): string
     {
         
         // Find and replace any URLs.
@@ -51,7 +51,7 @@ class URLHelper
      * @param bool $utf8
      * @return string
      */
-    public static function slug(string $str, string $separator = '-', bool $lowercase = true, bool $utf8 = true) : string
+    public static function slug(string $str, string $separator = '-', bool $lowercase = true, bool $utf8 = true): string
     {
  
         $q_separator = preg_quote($separator, '#');
@@ -81,7 +81,7 @@ class URLHelper
      * @param string $attributes
      * @return string
      */
-    private static function mailto(string $email, string $title = '', string $attributes = '') : string
+    private static function mailto(string $email, string $title = '', string $attributes = ''): string
     {
         $title = (string) $title;
         if ($title === '') {
@@ -97,7 +97,7 @@ class URLHelper
      * @param boolean $js
      * @return string
      */
-    private static function stringifyAttributes(string $attributes, bool $js = false) : ?string
+    private static function stringifyAttributes($attributes, bool $js = false): ?string
     {
         $atts = null;
         if (empty($attributes)) {

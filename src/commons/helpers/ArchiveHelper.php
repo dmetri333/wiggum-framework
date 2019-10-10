@@ -8,23 +8,23 @@ class ArchiveHelper
     
     /**
      * 
-     * @param string $filename
      * @param array $files
+     * @param string $target
      * @throws \Exception
-     * @return boolean
+     * @return bool
      */
-    public static function zip($filepath, array $files)
+    public static function zip(array $files, string $target): bool
     {
         if (!class_exists('ZipArchive')) {
             throw new \Exception('ArchiveHelper: ZipArchive is required php package');
         }
         
-        if (!is_dir(dirname($filepath))) {
+        if (!is_dir(dirname($target))) {
             return false;
         }
         
         $zip = new ZipArchive();
-        $result = $zip->open($filepath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $result = $zip->open($target, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         if ($result !== true) {
             return false;
         }
@@ -41,9 +41,9 @@ class ArchiveHelper
      * @param string $source
      * @param string $target
      * @throws \Exception
-     * @return boolean
+     * @return bool
      */
-    public static function unzip($source, $target)
+    public static function unzip(string $source, string $target): bool
     {
         if (!class_exists('ZipArchive')) {
             throw new \Exception('ArchiveHelper: ZipArchive is required php package');

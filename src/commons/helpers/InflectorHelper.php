@@ -6,12 +6,12 @@ class InflectorHelper
 
     /**
      *
-     * @param string $str
+     * @param string $word
      * @return string
      */
-    public static function singular(string $str) : string
+    public static function singular(string $word): string
     {
-        $result = strval($str);
+        $result = strval($word);
         if (!self::wordCountable($result)) {
             return $result;
         }
@@ -60,12 +60,12 @@ class InflectorHelper
     
     /**
      * 
-     * @param string $str
+     * @param string $word
      * @return string
      */
-    public static function plural(string $str) : string
+    public static function plural(string $word): string
     {
-        $result = strval($str);
+        $result = strval($word);
         if (!self::wordCountable($result)) {
             return $result;
         }
@@ -108,7 +108,7 @@ class InflectorHelper
      * @param string $word
      * @return bool
      */
-    public static function wordCountable(string $word) : bool
+    public static function wordCountable(string $word): bool
     {
         return !in_array(
             strtolower($word), [
@@ -151,7 +151,7 @@ class InflectorHelper
      * @param string $number
      * @return string
      */
-    public static function ordinalFormat(string $number) : string
+    public static function ordinalFormat(string $number): string
     {
         if (!ctype_digit((string) $number) || $number < 1) {
             return $number;

@@ -17,7 +17,7 @@ abstract class Handler {
 	 * @param Request $request        	
 	 * @return string
 	 */
-	protected function determineContentType(Request $request) : string
+	protected function determineContentType(Request $request): string
 	{
 		$acceptHeader = $request->getHeader('Accept');
 		$selectedContentTypes = array_intersect(explode(',', $acceptHeader), $this->knownContentTypes);
@@ -44,7 +44,7 @@ abstract class Handler {
 	 *
 	 * @return void
 	 */
-	protected function writeToErrorLog($throwable) : void
+	protected function writeToErrorLog($throwable): void
 	{
 		$message = 'Wiggum Application Error:' . PHP_EOL;
 	
@@ -64,7 +64,7 @@ abstract class Handler {
 	 *
 	 * @return string
 	 */
-	protected function renderErrorAsText($error) : string
+	protected function renderErrorAsText($error): string
 	{
 		$text = sprintf('Type: %s' . PHP_EOL, get_class($error));
 	
@@ -96,7 +96,7 @@ abstract class Handler {
 	 *
 	 * @param string $message
 	 */
-	protected function logError(string $message) : void
+	protected function logError(string $message): void
 	{
 		error_log($message);
 	}

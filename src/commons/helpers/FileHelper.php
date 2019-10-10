@@ -11,7 +11,7 @@ class FileHelper
      * @param string $mode
      * @return boolean
      */
-    public static function write(string $path, string $data, $mode = 'wb') : bool
+    public static function write(string $path, string $data, string $mode = 'wb'): bool
     {
         if (!$fp = @fopen($path, $mode)) {
             return false;
@@ -38,12 +38,12 @@ class FileHelper
      * @param int $mode
      * @return boolean
      */
-    public static function createFolder(string $source, bool $recursive = true, int $mode = 0770) : bool
+    public static function createFolder(string $path, bool $recursive = true, int $mode = 0770): bool
     {
-        if (file_exists($source)) {
+        if (file_exists($path)) {
             return true;
         } else {
-            $result = mkdir($source, $mode, $recursive);
+            $result = mkdir($path, $mode, $recursive);
             if (!$result) {
                 return false;
             }
@@ -58,7 +58,7 @@ class FileHelper
      * @param string $target
      * @return boolean
      */
-    public static function move(string $source, string $target) : bool
+    public static function move(string $source, string $target): bool
     {
         if (file_exists($target)) {
             return false;
@@ -79,10 +79,10 @@ class FileHelper
      *
      * @param string $source
      * @param string $target
-     * @param boolean $overwrite
-     * @return boolean
+     * @param bool $overwrite
+     * @return bool
      */
-    public static function copy(string $source, string $target, $overwrite = false) : bool
+    public static function copy(string $source, string $target, bool $overwrite = false): bool
     {
         
         if (!file_exists($source)) {
@@ -119,10 +119,10 @@ class FileHelper
     /**
      * 
      * @param string $source
-     * @param boolean $recursive
-     * @return boolean
+     * @param bool $recursive
+     * @return bool
      */
-    public static function delete(string $source, bool $recursive = false) : bool
+    public static function delete(string $source, bool $recursive = false): bool
     {
         if (!file_exists($source)) {
             return false;
@@ -155,7 +155,7 @@ class FileHelper
      * @param string $source
      * @param int $depth
      * @param bool $hidden
-     * @return mixed
+     * @return boolean|array
      */
     public static function directoryList(string $source, int $depth = 0, bool $hidden = false)
     {
@@ -199,7 +199,7 @@ class FileHelper
      * @param string $source
      * @return int
      */
-    public static function size(string $source) : int
+    public static function size(string $source): int
     {
         
         if (is_file($source)) {
@@ -224,7 +224,7 @@ class FileHelper
      * @param array $returnedValues
      * @return boolean|array
      */
-    public static function fileInfo(string $file, $returnedValues = ['name', 'path', 'size', 'date'])
+    public static function fileInfo(string $file, array $returnedValues = ['name', 'path', 'size', 'date'])
     {
         if (!file_exists($file)) {
             return false;
@@ -269,7 +269,7 @@ class FileHelper
      * @param int $bytes
      * @return string
      */
-    public static function formatBytes(int $bytes) : string
+    public static function formatBytes(int $bytes): string
     {
         $result = (float) $bytes;
         if ($bytes >= 1048576) {
@@ -287,7 +287,7 @@ class FileHelper
      * @param string $filename
      * @return string
      */
-    public static function extension(string $filename) : string
+    public static function extension(string $filename): string
     {
         $x = explode('.', $filename);
         
@@ -304,7 +304,7 @@ class FileHelper
      * @param string $default
      * @return string
      */
-    public static function mimeType(string $file, string $default = '') : string
+    public static function mimeType(string $file, string $default = ''): string
     {
         $fileType = self::detectMimeType($file);
         $fileType = empty($fileType) ? $default : $fileType;
@@ -439,7 +439,7 @@ class FileHelper
      * @param string $file
      * @return bool
      */
-    public static function isWritable(string $file) : bool
+    public static function isWritable(string $file): bool
     {
         // If we're on a UNIX-like server, just is_writable()
         if (DIRECTORY_SEPARATOR === '/') {
@@ -447,7 +447,7 @@ class FileHelper
         }
         
         /* For Windows servers and safe_mode "on" installations we'll actually
-         * write a file then read it. Bah...
+         * write a file then read it.
          */
         if (is_dir($file)) {
             $file = rtrim($file, '/').'/'.md5(mt_rand());

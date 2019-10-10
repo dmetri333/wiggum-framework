@@ -7,12 +7,12 @@ class TextHelper
     /**
      *
      * @param string $string
-     * @param int max
-     * @param float (1|0) or float, .5, .2, etc for position to split
-     * @param string ellipsis
+     * @param int $max
+     * @param float $position - (1|0) or float, .5, .2, etc for position to split
+     * @param string $ellipsis
      * @return string
      */
-    public static function ellipsize(string $string, int $max, float $position = 1, string $ellipsis = '&hellip;') : string
+    public static function ellipsize(string $string, int $max, float $position = 1, string $ellipsis = '&hellip;'): string
     {
         
         // Strip tags
@@ -43,7 +43,7 @@ class TextHelper
      * @param string $str
      * @return string
      */
-    public static function asciiToEntities(string $str) : string
+    public static function asciiToEntities(string $str): string
     {
         $out = '';
         $length = defined('MB_OVERLOAD_STRING') ? mb_strlen($str, '8bit') - 1 : strlen($str) - 1;
@@ -88,11 +88,11 @@ class TextHelper
      *
      * Converts character entities back to ASCII
      *
-     * @param string
-     * @param bool
+     * @param string $str
+     * @param bool $all
      * @return string
      */
-    public static function entitiesToAscii(string $str, bool $all = true) : string
+    public static function entitiesToAscii(string $str, bool $all = true): string
     {
         if (preg_match_all('/\&#(\d+)\;/', $str, $matches)) {
             for ($i = 0, $s = count($matches[0]); $i < $s; $i++) {
