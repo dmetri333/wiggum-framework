@@ -23,7 +23,7 @@ class Kernel extends \wiggum\foundation\Kernel {
         $this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
         
         $this->loadEnvironment($this->app);
-        $this->loadBootFiles($this->app, $this->app->config->get('app.boot', []));
+        $this->loadBootFiles($this->app, $this->app->config->get('app.boot.http', []));
     }
     
 	/**
