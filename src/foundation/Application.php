@@ -97,7 +97,7 @@ class Application {
 	 */
 	public function setBasePath(string $basePath): void
 	{
-		$this->basePath  = rtrim($basePath, '\/');
+		$this->basePath = rtrim($basePath, '\/');
 	}
 	
 	/**

@@ -7,13 +7,13 @@ interface Route {
      * 
      * @return array
      */
-    public function getMiddleware() : array;
+    public function getMiddleware(): array;
     
     
     /**
      * 
      * @return array
      */
-    public function process() : array;
+    public function process(): array;
     
 }
