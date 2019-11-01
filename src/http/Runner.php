@@ -1,7 +1,8 @@
 <?php
 namespace wiggum\http;
 
-class Runner {
+class Runner
+{
 
 	protected $queue = [];
 

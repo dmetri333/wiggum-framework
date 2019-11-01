@@ -3,7 +3,8 @@ namespace wiggum\http\interfaces;
 
 use \wiggum\http\Request;
 
-interface Router {
+interface Router
+{
 	
 	/**
 	 * 

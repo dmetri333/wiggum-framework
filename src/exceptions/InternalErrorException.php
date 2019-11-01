@@ -3,7 +3,8 @@ namespace wiggum\exceptions;
 
 use \Exception;
 
-class InternalErrorException extends Exception {
+class InternalErrorException extends Exception
+{
 	
 	/**
 	 * 

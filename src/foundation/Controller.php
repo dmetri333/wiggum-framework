@@ -4,7 +4,8 @@ namespace wiggum\foundation;
 use wiggum\http\Request;
 use wiggum\http\Response;
 
-abstract class Controller {
+abstract class Controller
+{
 	
 	protected $app;
 	

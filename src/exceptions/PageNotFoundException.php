@@ -3,7 +3,8 @@ namespace wiggum\exceptions;
 
 use \Exception;
 
-class PageNotFoundException extends Exception {
+class PageNotFoundException extends Exception
+{
 	
 	/**
 	 * 

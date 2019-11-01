@@ -1,7 +1,8 @@
 <?php
 namespace wiggum\http\interfaces;
 
-interface Route {
+interface Route
+{
     
     /**
      * 

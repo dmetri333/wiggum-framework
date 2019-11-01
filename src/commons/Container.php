@@ -3,7 +3,8 @@ namespace wiggum\commons;
 
 use \ArrayAccess;
 
-class Container implements ArrayAccess {
+class Container implements ArrayAccess
+{
     
 	private $values = [];
 	private $factories;

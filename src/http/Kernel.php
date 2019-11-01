@@ -7,7 +7,8 @@ use \wiggum\exceptions\PageNotFoundException;
 use \wiggum\http\interfaces\Route;
 use \wiggum\foundation\Application;
 
-class Kernel extends \wiggum\foundation\Kernel {
+class Kernel extends \wiggum\foundation\Kernel
+{
 	
     protected $app;
     

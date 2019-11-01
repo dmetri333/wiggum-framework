@@ -3,7 +3,8 @@ namespace wiggum\console;
 
 use wiggum\foundation\Application;
 
-abstract class Command {
+abstract class Command
+{
     
     protected $app;
     

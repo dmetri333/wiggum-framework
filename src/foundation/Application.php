@@ -4,7 +4,8 @@ namespace wiggum\foundation;
 use \wiggum\commons\Container;
 use \wiggum\commons\Configuration;
 
-class Application {
+class Application
+{
 
 	public $basePath;
 	public $config;

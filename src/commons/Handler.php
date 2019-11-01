@@ -3,7 +3,8 @@ namespace wiggum\commons;
 
 use \wiggum\http\Request;
 
-abstract class Handler {
+abstract class Handler
+{
 	
 	protected $knownContentTypes = [ 
 			'application/json',

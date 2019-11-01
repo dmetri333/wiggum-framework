@@ -3,7 +3,8 @@ namespace wiggum\commons;
 
 use \Closure;
 
-class Configuration {
+class Configuration
+{
 	
 	/**
 	 * All of the configuration items.

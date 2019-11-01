@@ -3,7 +3,8 @@ namespace wiggum\exceptions;
 
 use \Exception;
 
-class ForbiddenException extends Exception {
+class ForbiddenException extends Exception
+{
 	
 	/**
 	 * 

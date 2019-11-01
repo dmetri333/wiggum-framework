@@ -5,7 +5,8 @@ use \Exception;
 use \Throwable;
 use \wiggum\foundation\Application;
 
-class Kernel extends \wiggum\foundation\Kernel {
+class Kernel extends \wiggum\foundation\Kernel
+{
 
     protected $app;
     
