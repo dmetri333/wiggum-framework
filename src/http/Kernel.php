@@ -31,7 +31,7 @@ class Kernel extends \wiggum\foundation\Kernel
 	 * 
 	 * @return Response
 	 */
-	public function run()
+	public function run(): void
 	{
 		$request = $this->buildRequest();
 		$response = new Response();
@@ -39,8 +39,6 @@ class Kernel extends \wiggum\foundation\Kernel
 		$response = $this->process($request, $response);
 	
 		$this->respond($response);
-	
-		return $response;
 	}
 	
 	/**

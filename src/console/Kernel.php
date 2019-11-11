@@ -29,7 +29,7 @@ class Kernel extends \wiggum\foundation\Kernel
 	 * 
 	 * @return string
 	 */
-	public function run()
+	public function run(): void
 	{
 	    if (!$this->isCli()) {
 	        throw new \RuntimeException('Command must run in cli!');
@@ -38,7 +38,6 @@ class Kernel extends \wiggum\foundation\Kernel
 	    $response = $this->process();
 	
 		$this->respond($response);
-		return $response;
 	}
 	
 	/**
