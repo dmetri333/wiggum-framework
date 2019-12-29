@@ -29,13 +29,27 @@ class ArchiveHelper
             return false;
         }
         
+        $localNames = [];
+        
         foreach ($files as $file) {
-            is_readable($file) && $zip->addFile($file, basename($file));
+            
+            $basename = basename($file);
+            if (in_array($basename, $localNames)) {
+                $name = pathinfo($basename, PATHINFO_FILENAME);
+                $ext = pathinfo($basename, PATHINFO_EXTENSION);
+                $basename = StringHelper::incrementString($name).'.'.$ext;
+            }
+            
+            if (is_readable($file)) {
+                $zip->addFile($file, $basename);
+                $localNames[] = $basename;
+            }
+
         }
         
         return $zip->close();
     }
-    
+  
     /**
      * 
      * @param string $source
