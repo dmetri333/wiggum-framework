@@ -6,6 +6,7 @@ use \Throwable;
 use \wiggum\http\Request;
 use \wiggum\http\Response;
 use \wiggum\exceptions\PageNotFoundException;
+use \wiggum\commons\helpers\FileHelper;
 
 class Kernel {
 
@@ -215,7 +216,7 @@ class Kernel {
 	    
 	    $items = [];
 	    foreach ($files as $file) {
-	        if ($file != '.' && $file != '..') {
+	        if ($file != '.' && $file != '..' && FileHelper::extension($file) == 'php') {
 	            $items[pathinfo($file, PATHINFO_FILENAME)] = require $path .DIRECTORY_SEPARATOR. $file;
 	        }
 	    }
