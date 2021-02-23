@@ -31,6 +31,22 @@ abstract class Kernel
 	}
 	
 	/**
+	 *
+	 * @param string $path
+	 * @return void
+	 */
+	protected function loadEnvironmentFile(string $file): void
+    {
+		$environmentVars = @parse_ini_file($file, false, INI_SCANNER_TYPED);
+		
+		if ($environmentVars !== false) {
+			foreach ($environmentVars as $key => $value) {
+				$_ENV[$key] = $value;
+			}
+		}
+    }
+
+	/**
 	 * 
 	 * @param Application $app
 	 * @param array $bootFiles
@@ -46,7 +62,7 @@ abstract class Kernel
 	 * 
 	 * @param Application $app
 	 */
-	protected function loadEnvironment(Application $app): void
+	protected function setupEnvironment(Application $app): void
 	{
 	    date_default_timezone_set($app->config->get('app.timezone', 'UTC'));
 	    mb_internal_encoding($app->config->get('app.encoding', 'UTF-8'));
