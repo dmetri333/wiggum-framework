@@ -360,67 +360,6 @@ class FileHelper
             }
         }
         
-        /* This is an ugly hack, but UNIX-type systems provide a "native" way to detect the file type,
-         * which is still more secure than depending on the value of $_FILES[$field]['type'], and as it
-         * was reported in issue #750 (https://github.com/EllisLab/CodeIgniter/issues/750) - it's better
-         * than mime_content_type() as well, hence the attempts to try calling the command line with
-         * three different functions.
-         *
-         * Notes:
-         *	- the DIRECTORY_SEPARATOR comparison ensures that we're not on a Windows system
-         *	- many system admins would disable the exec(), shell_exec(), popen() and similar functions
-         *	  due to security concerns, hence the function_usable() checks
-         */
-        if (DIRECTORY_SEPARATOR !== '\\')
-        {
-            $cmd = 'file --brief --mime '.escapeshellarg($file).' 2>&1';
-            
-            if (function_usable('exec'))
-            {
-                /* This might look confusing, as $mime is being populated with all of the output when set in the second parameter.
-                 * However, we only need the last line, which is the actual return value of exec(), and as such - it overwrites
-                 * anything that could already be set for $mime previously. This effectively makes the second parameter a dummy
-                 * value, which is only put to allow us to get the return status code.
-                 */
-                $mime = @exec($cmd, $mime, $returnStatus);
-                if ($returnStatus === 0 && is_string($mime) && preg_match($regexp, $mime, $matches))
-                {
-                    return $matches[1];
-                }
-            }
-            
-            if (function_usable('shell_exec'))
-            {
-                $mime = @shell_exec($cmd);
-                if (strlen($mime) > 0)
-                {
-                    $mime = explode("\n", trim($mime));
-                    if (preg_match($regexp, $mime[(count($mime) - 1)], $matches))
-                    {
-                        return $matches[1];
-                    }
-                }
-            }
-            
-            if (function_usable('popen'))
-            {
-                $proc = @popen($cmd, 'r');
-                if (is_resource($proc))
-                {
-                    $mime = @fread($proc, 512);
-                    @pclose($proc);
-                    if ($mime !== false)
-                    {
-                        $mime = explode("\n", trim($mime));
-                        if (preg_match($regexp, $mime[(count($mime) - 1)], $matches))
-                        {
-                            return $matches[1];
-                        }
-                    }
-                }
-            }
-        }
-        
         // Fall back to mime_content_type(), if available (still better than $_FILES[$field]['type'])
         if (function_exists('mime_content_type'))
         {
