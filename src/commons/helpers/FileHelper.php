@@ -371,7 +371,7 @@ class FileHelper
         {
             $cmd = 'file --brief --mime '.escapeshellarg($file).' 2>&1';
             
-            if (function_usable('exec'))
+            if (function_exists('exec'))
             {
                 /* This might look confusing, as $mime is being populated with all of the output when set in the second parameter.
                  * However, we only need the last line, which is the actual return value of exec(), and as such - it overwrites
@@ -385,7 +385,7 @@ class FileHelper
                 }
             }
             
-            if (function_usable('shell_exec'))
+            if (function_exists('shell_exec'))
             {
                 $mime = @shell_exec($cmd);
                 if (strlen($mime) > 0)
@@ -398,7 +398,7 @@ class FileHelper
                 }
             }
             
-            if (function_usable('popen'))
+            if (function_exists('popen'))
             {
                 $proc = @popen($cmd, 'r');
                 if (is_resource($proc))
