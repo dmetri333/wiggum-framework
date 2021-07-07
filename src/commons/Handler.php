@@ -20,7 +20,7 @@ abstract class Handler
 	 */
 	protected function determineContentType(Request $request): string
 	{
-		$acceptHeader = $request->getHeader('Accept');
+		$acceptHeader = $request->getHeader('accept');
 		$selectedContentTypes = array_intersect(explode(',', $acceptHeader), $this->knownContentTypes);
 		
 		if (count($selectedContentTypes)) {
