@@ -1,15 +1,24 @@
 <?php
 namespace wiggum\commons;
 
-class Container implements \ArrayAccess {
-	private $values = array();
+use \ArrayAccess;
+
+class Container implements ArrayAccess
+{
+    
+	private $values = [];
 	private $factories;
 	private $protected;
-	private $frozen = array();
-	private $raw = array();
-	private $keys = array();
+	private $frozen = [];
+	private $raw = [];
+	private $keys = [];
 	
-	public function __construct(array $values = array()) {
+	/**
+	 * 
+	 * @param array $values
+	 */
+	public function __construct(array $values = [])
+	{
 		$this->factories = new \SplObjectStorage();
 		$this->protected = new \SplObjectStorage();
 
@@ -18,7 +27,13 @@ class Container implements \ArrayAccess {
 		}
 	}
 
-	public function offsetSet($id, $value) {
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see ArrayAccess::offsetSet()
+	 */
+	public function offsetSet($id, $value)
+	{
 		if (isset($this->frozen[$id])) {
 			throw new \RuntimeException(sprintf('Cannot override frozen service "%s".', $id));
 		}
@@ -27,7 +42,13 @@ class Container implements \ArrayAccess {
 		$this->keys[$id] = true;
 	}
 
-	public function offsetGet($id) {
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see ArrayAccess::offsetGet()
+	 */
+	public function offsetGet($id)
+	{
 		if (!isset($this->keys[$id])) {
 			throw new \InvalidArgumentException(sprintf('Identifier "%s" is not defined.', $id));
 		}
@@ -54,11 +75,23 @@ class Container implements \ArrayAccess {
 		return $val;
 	}
 	
-	public function offsetExists($id) {
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see ArrayAccess::offsetExists()
+	 */
+	public function offsetExists($id)
+	{
 		return isset($this->keys[$id]);
 	}
 
-	public function offsetUnset($id) {
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see ArrayAccess::offsetUnset()
+	 */
+	public function offsetUnset($id)
+	{
 		if (isset($this->keys[$id])) {
 			if (is_object($this->values[$id])) {
 				unset($this->factories[$this->values[$id]], $this->protected[$this->values[$id]]);
@@ -68,7 +101,14 @@ class Container implements \ArrayAccess {
 		}
 	}
 
-	public function factory($callable) {
+	/**
+	 * 
+	 * @param callable $callable
+	 * @throws \InvalidArgumentException
+	 * @return callable
+	 */
+	public function factory($callable)
+	{
 		if (!is_object($callable) || !method_exists($callable, '__invoke')) {
 			throw new \InvalidArgumentException('Service definition is not a Closure or invokable object.');
 		}
@@ -78,7 +118,14 @@ class Container implements \ArrayAccess {
 		return $callable;
 	}
 
-	public function protect($callable) {
+	/**
+	 * 
+	 * @param callable $callable
+	 * @throws \InvalidArgumentException
+	 * @return callable
+	 */
+	public function protect($callable)
+	{
 		if (!is_object($callable) || !method_exists($callable, '__invoke')) {
 			throw new \InvalidArgumentException('Callable is not a Closure or invokable object.');
 		}
@@ -88,7 +135,14 @@ class Container implements \ArrayAccess {
 		return $callable;
 	}
 
-	public function raw($id) {
+	/**
+	 * 
+	 * @param string $id
+	 * @throws \InvalidArgumentException
+	 * @return mixed
+	 */
+	public function raw($id)
+	{
 		if (!isset($this->keys[$id])) {
 			throw new \InvalidArgumentException(sprintf('Identifier "%s" is not defined.', $id));
 		}
@@ -100,16 +154,33 @@ class Container implements \ArrayAccess {
 		return $this->values[$id];
 	}
 
-	public function keys() {
+	/**
+	 * 
+	 * @return array
+	 */
+	public function keys()
+	{
 		return array_keys($this->values);
 	}
 	
-	public function __get($name) {
-		return $this->offsetGet($name);
+	/**
+	 * 
+	 * @param mixed $name
+	 * @return mixed
+	 */
+	public function __get($name)
+	{
+	    return $this->offsetGet($name);
 	}
 	
-	public function __isset($name) {
-		return $this->offsetExists($name);
+	/**
+	 * 
+	 * @param mixed $name
+	 * @return boolean
+	 */
+	public function __isset($name)
+	{
+	    return $this->offsetExists($name);
 	}
 	
 }

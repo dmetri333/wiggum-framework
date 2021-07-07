@@ -5,6 +5,11 @@ use \Imagick;
 use \ImagickDraw;
 use \RuntimeException;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 class ImageProcessorIM extends ImageProcessor {
 	
 	/**

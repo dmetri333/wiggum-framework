@@ -5,6 +5,11 @@ use \BadFunctionCallException;
 use \RuntimeException;
 use \Exception;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 class ImageProcessorGD extends ImageProcessor {
 	
 	/**

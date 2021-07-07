@@ -1,6 +1,11 @@
 <?php
 namespace wiggum\commons\io;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 class FileDownloadHeaders {
 	
 	private $expires;

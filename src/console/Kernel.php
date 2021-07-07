@@ -5,32 +5,41 @@ use \Exception;
 use \Throwable;
 use \wiggum\foundation\Application;
 
-class Kernel {
+class Kernel extends \wiggum\foundation\Kernel
+{
 
-	private $app;
-
-	/**
-	 * 
-	 * @param Application $app
-	 */
-	public function __construct(Application $app) {
-		$this->app = $app;
+    protected $app;
+    
+    /**
+     * Start the engine
+     *
+     * @param Application $app
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+        
+		$this->loadEnvironmentFile($this->app->basePath.DIRECTORY_SEPARATOR.'.env');
 		
-		$this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
-		$this->app->loadEnvironment();
-		$this->app->loadBootFiles();
-	}
-	
+        $this->app->loadConfig($this->loadConfigurationFiles($this->app->basePath.DIRECTORY_SEPARATOR.'config'));
+        
+        $this->setupEnvironment($this->app);
+        $this->loadBootFiles($this->app, $this->app->config->get('app.boot.console', []));
+    }
+    
 	/**
 	 * 
 	 * @return string
 	 */
-	public function run() {
-	   
+	public function run(): void
+	{
+	    if (!$this->isCli()) {
+	        throw new \RuntimeException('Command must run in cli!');
+	    }
+	    
 	    $response = $this->process();
 	
 		$this->respond($response);
-		return $response;
 	}
 	
 	/**
@@ -38,7 +47,8 @@ class Kernel {
 	 * @throws \RuntimeException
 	 * @return string
 	 */
-	private function process() {
+	private function process(): string
+	{
 	    global $argv;
 	    
 	    try {
@@ -49,7 +59,7 @@ class Kernel {
             $command = $argv[1];
             $args = array_slice($argv, 2);
             
-            $possibleCommands = $this->app->config->get('commands');
+            $possibleCommands = $this->app->getCommands();
             if (!array_key_exists($command, $possibleCommands)) {
                 throw new \RuntimeException('Command not found');
             }
@@ -63,11 +73,11 @@ class Kernel {
             
             $task = new $class($this->app);
             
-            if (!method_exists($task, 'command')) {
-                throw new \RuntimeException(sprintf('Class %s does not have a command() method', $class));
+            if (!method_exists($task, 'handle')) {
+                throw new \RuntimeException(sprintf('Class %s does not have a handle() method', $class));
             }
             
-            return $task->command($args);
+            return $task->handle($args);
             
 	    } catch (Exception $e) {
 	        return $e->getMessage();
@@ -81,26 +91,39 @@ class Kernel {
 	 * 
 	 * @param string $response
 	 */
-	private function respond($response) {
+	private function respond(string $response): void
+	{
 		echo $response;
 		echo "\n";
 	}
 	
 	/**
-	 *
-	 * @param string $path
-	 
-	 * @return array
+	 * 
+	 * @return bool
 	 */
-	private function loadConfigurationFiles($path) {
-	    $files = scandir($path);
-	    
-	    $items = [];
-	    foreach ($files as $file) {
-	        if ($file != '.' && $file != '..')
-	            $items[pathinfo($file, PATHINFO_FILENAME)] = require $path .DIRECTORY_SEPARATOR. $file;
+	private function isCli(): bool
+	{
+	    if (defined('STDIN')) {
+	        return true;
 	    }
-	    return $items;
+	    
+	    if (php_sapi_name() === 'cli') {
+	        return true;
+	    }
+	    
+	    if (array_key_exists('SHELL', $_ENV)) {
+	        return true;
+	    }
+	    
+	    if (empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0) {
+	        return true;
+	    }
+	    
+	    if (!array_key_exists('REQUEST_METHOD', $_SERVER)) {
+	        return true;
+	    }
+	    
+	    return false;
 	}
 	
 }

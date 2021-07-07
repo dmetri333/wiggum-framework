@@ -6,18 +6,19 @@ class DownloadHelper
     
     /**
      *
-     * @param string $filename
-     * @param string $data
-     * @param string $setMime
+     * @param string $source
+     * @param boolean $setMime
+     * @param string $charset
+     * @return void
      */
-    public static function forceFile($filename, $setMime = false, $charset = 'UTF-8')
+    public static function forceFile(string $source, bool $setMime = false, string $charset = 'UTF-8'): void
     {
-        if ($filename === '') {
+        if ($source === '') {
             return;
         }
         
-        $filepath = $filename;
-        $filename = explode('/', str_replace(DIRECTORY_SEPARATOR, '/', $filename));
+        $filepath = $source;
+        $filename = explode('/', str_replace(DIRECTORY_SEPARATOR, '/', $source));
         $filename = end($filename);
         
         if (!@is_file($filepath) || ($filesize = @filesize($filepath)) === false) {
@@ -30,22 +31,9 @@ class DownloadHelper
         $x = explode('.', $filename);
         $extension = end($x);
         
-        /*
-         //TODO fast way to look up mimes
-         if ($setMime) {
-         if (count($x) === 1 || $extension === '') {
-         return;
-         }
-         
-         // Load the mime types
-         $mimes =& get_mimes();
-         
-         // Only change the default MIME if we can find one
-         if (isset($mimes[$extension])) {
-         $mime = is_array($mimes[$extension]) ? $mimes[$extension][0] : $mimes[$extension];
-         }
-         }
-         */
+        if ($setMime) {
+            //TODO - fast way to look up mimes
+        }
         
         /* It was reported that browsers on Android 2.1 (and possibly older as well)
          * need to have the filename extension upper-cased in order to be able to
@@ -88,9 +76,11 @@ class DownloadHelper
      *
      * @param string $filename
      * @param string $data
-     * @param string $setMime
+     * @param boolean $setMime
+     * @param string $charset
+     * @return void
      */
-    public static function forceData($filename, $data, $setMime = false, $charset = 'UTF-8')
+    public static function forceData(string $filename, string $data, bool $setMime = false, string $charset = 'UTF-8'): void
     {
         if ($filename === '' || empty($data)) {
             return;
@@ -104,22 +94,9 @@ class DownloadHelper
         $x = explode('.', $filename);
         $extension = end($x);
         
-        /*
-        //TODO fast way to look up mimes
         if ($setMime) {
-            if (count($x) === 1 || $extension === '') {
-                return;
-            }
-            
-            // Load the mime types
-            $mimes =& get_mimes();
-            
-            // Only change the default MIME if we can find one
-            if (isset($mimes[$extension])) {
-                $mime = is_array($mimes[$extension]) ? $mimes[$extension][0] : $mimes[$extension];
-            }
+            //TODO - fast way to look up mimes
         }
-        */
         
         /* It was reported that browsers on Android 2.1 (and possibly older as well)
          * need to have the filename extension upper-cased in order to be able to

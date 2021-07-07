@@ -11,7 +11,7 @@ class FileHelperTest extends TestCase
         
     private $root;
     
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->root = vfsStream::setup();
     }

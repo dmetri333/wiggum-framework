@@ -1,69 +1,27 @@
 <?php
 namespace wiggum\foundation;
 
-use wiggum\http\Request;
-use wiggum\http\Response;
-
-abstract class Controller {
+abstract class Controller
+{
 	
 	protected $app;
 	
 	/**
 	 * 
+	 * @param Application $app
 	 */
-	public function __construct(Application $app) {
+	public function __construct(Application $app)
+	{
 		$this->app = $app;
 	}
 	
 	/**
 	 * 
-	 * @return \wiggum\foundation\Application
+	 * @return Application
 	 */
-	public function getApplication() {
+	public function getApplication(): Application
+	{
 		return $this->app;
-	}
-	
-	/**
-	 * @deprecated use service $this->dictionary->get($name, $language)
-	 * 
-	 * @param string $name
-	 * @param string $language
-	 * @return array
-	 */
-	public function getDictionary($name, $language = null) {
-	    return $this->dictionary->get($name, $language);
-	}
-	
-	/**
-	 * @deprecated use service $this->dictionary->replace($name, $replace, $language)
-	 * 
-	 * @param string $name
-	 * @param array $replace
-	 * @param string $language
-	 */
-	public function getDictionaryReplace($name, array $replace, $language = null) {
-	    return $this->dictionary->replace($name, $replace, $language);
-	}
-	
-	/**
-	 * 
-	 * @param string $classPath
-	 * @param string $method
-	 * @param Request $request
-	 */
-	public function forward($classPath, $method = 'doDefault', Request $request = null) {
-		$component = new $classPath($this->app);
-		
-		$properties = get_object_vars($this);
-		foreach ($properties as $propertyName => $propertyValue) {
-			$component->$propertyName = $propertyValue;
-		}
-		
-		if (!isset($request)) {
-			$request = new Request();
-		}
-		
-		return $component->$method($request, new Response());
 	}
 	
 	/**
@@ -73,7 +31,8 @@ abstract class Controller {
 	 * @param string $method
 	 * @return mixed
 	 */
-	public function __get($name) {
+	public function __get(string $name)
+	{
 		if ($this->app->getContainer()->offsetExists($name)) {
 			$obj = $this->app->getContainer()->offsetGet($name);
 			return $obj;
@@ -85,17 +44,11 @@ abstract class Controller {
 	/**
 	 * 
 	 * @param string $name
-	 * @return mixed
+	 * @return bool
 	 */
-	public function has($name) {
+	public function has(string $name): bool
+	{
 		return $this->app->getContainer()->offsetExists($name);
 	}
-	
-	/**
-	 * 
-	 * @param Request $request
-	 * @param Response $response
-	 */
-	public abstract function doDefault(Request $request, Response $response);
 	
 }

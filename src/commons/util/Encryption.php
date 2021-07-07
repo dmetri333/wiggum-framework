@@ -4,6 +4,11 @@ namespace wiggum\commons\util;
 use \Exception;
 use \LengthException;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 class Encryption {
 	
 	private $key;

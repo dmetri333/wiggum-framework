@@ -1,6 +1,11 @@
 <?php
 namespace wiggum\commons\imagery;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 abstract class ImageProcessor {
 	
 	const BYTES_PER_PIXEL = 4;

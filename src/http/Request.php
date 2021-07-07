@@ -1,7 +1,8 @@
 <?php
 namespace wiggum\http;
 
-class Request {
+class Request
+{
 	
 	private $requestURI;
 	private $serverName;
@@ -14,116 +15,144 @@ class Request {
 	private $files;
 	private $headers = [];
 	
-	public function getRequestURI() {
+	public function getRequestURI()
+	{
 		return $this->requestURI;
 	}
 	
-	public function setRequestURI($requestURI) {
+	public function setRequestURI($requestURI)
+	{
 		$this->requestURI = $requestURI;
 	}
 	
-	public function getServerName() {
+	public function getServerName()
+	{
 		return $this->serverName;
 	}
 	
-	public function setServerName($serverName) {
+	public function setServerName($serverName)
+	{
 		$this->serverName = $serverName;
 	}
 	
-	public function getContextPath() {
+	public function getContextPath()
+	{
 		return $this->contextPath;
 	}
 	
-	public function setContextPath($contextPath) {
+	public function setContextPath($contextPath)
+	{
 		$this->contextPath = $contextPath;
 	}
 	
-	public function getContextPathSegment($index) {
+	public function getContextPathSegment($index)
+	{
 		return $this->contextPathSegments[$index];
 	}
 	
-	public function getContextPathSegments() {
+	public function getContextPathSegments()
+	{
 		return $this->contextPathSegments;
 	}
 	
-	public function setContextPathSegments(array $contextPathSegments) {
+	public function setContextPathSegments(array $contextPathSegments)
+	{
 		$contextPathSegments = array_slice($contextPathSegments, 1);
 		$this->contextPathSegments = $contextPathSegments;
 	}
 	
-	public function getMethod() {
+	public function getMethod()
+	{
 		return $this->method;
 	}
 	
-	public function setMethod($method) {
+	public function setMethod($method)
+	{
 		$this->method = $method;
 	}
 	
-	public function getParameters() {
+	public function getParameters()
+	{
 		return $this->parameters;
 	}
 	
-	public function getParameter($name, $default = null) {
+	public function getParameter($name, $default = null)
+	{
 		return isset($this->parameters[$name]) ? $this->parameters[$name] : (isset($default) ? $default : null);
 	}
 
-	public function hasParameter($name) {
+	public function hasParameter($name)
+	{
 		return isset($this->parameters[$name]);
 	}
 	
-	public function setParameters(array $parameters) {
+	public function setParameters(array $parameters)
+	{
 		$this->parameters = $parameters;
 	}
 	
-	public function setParameter($name, $value) {
+	public function setParameter($name, $value)
+	{
 		$this->parameters[$name] = $value;
 	}
 	
-	public function getAttributes() {
+	public function getAttributes()
+	{
 		return $this->attributes;
 	}
 	
-	public function setAttributes(array $attributes) {
+	public function setAttributes(array $attributes)
+	{
 		$this->attributes = $attributes;
 	}
 	
-	public function getAttribute($name, $default = null) {
+	public function getAttribute($name, $default = null)
+	{
 		return isset($this->attributes[$name]) ? $this->attributes[$name] : (isset($default) ? $default : null);
 	}
 	
-	public function setAttribute($name, $value) {
+	public function setAttribute($name, $value)
+	{
 		$this->attributes[$name] = $value;
 	}
 	
-	public function hasAttribute($name) {
+	public function hasAttribute($name)
+	{
 		return isset($this->attributes[$name]);
 	}
 	
-	public function getCookies() {
+	public function getCookies()
+	{
 		return $this->cookies;
 	}
 	
-	public function getCookie($name, $default = null) {
+	public function getCookie($name, $default = null)
+	{
 		return isset($this->cookies[$name]) ? $this->cookies[$name] : (isset($default) ? $default : null);
 	}
 	
-	public function hasCookie($name) {
+	public function hasCookie($name)
+	{
 		return isset($this->cookies[$name]);
 	}
 	
-	public function setCookies(array $cookies) {
+	public function setCookies(array $cookies)
+	{
 		$this->cookies = $cookies;
 	}
 	
-	public function getFiles() {
+	public function getFiles()
+	{
 		return $this->files;
 	}
 
-	public function getFile($name) {
+	public function getFile($name)
+	{
 		return $this->files[$name];
 	}
 	
-	public function setFiles(array $files) {
+	public function setFiles(array $files)
+	{
 		$this->files = array();
 		if (!empty($files)) {
 			foreach($files as $key => $value) {
@@ -136,7 +165,8 @@ class Request {
 		}
 	}
 	
-	private function reorderMultipleFiles(array $files) {
+	private function reorderMultipleFiles(array $files)
+	{
 		$result = array();
 		foreach($files as $key1 => $value1) {
 			foreach($value1 as $key2 => $value2) {
@@ -146,23 +176,28 @@ class Request {
 		return $result;
 	}
 	
-	public function setHeaders($headers) {
+	public function setHeaders($headers)
+	{
 		$this->headers = $headers;
 	}
 	
-	public function getHeaders() {
+	public function getHeaders()
+	{
 		return $this->headers;
 	}
 	
-	public function hasHeader($name) {
+	public function hasHeader($name)
+	{
 		return isset($this->headers[$name]);
 	}
 	
-	public function addHeader($name, $value) {
+	public function addHeader($name, $value)
+	{
 		$this->headers[$name] = $value;
 	}
 	
-	public function getHeader($name) {
+	public function getHeader($name)
+	{
 		return isset($this->headers[$name]) ? $this->headers[$name] : null;
 	}
 	
