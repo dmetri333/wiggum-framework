@@ -30,7 +30,13 @@ class ArchiveHelper
         }
         
         foreach ($files as $file) {
-            is_readable($file) && $zip->addFile($file, basename($file));
+            if (substr($file, 0, 4) === 'http') {
+                $contents = file_get_contents($file);
+                !empty($contents) && $zip->addFromString(basename($file), $contents);
+            } else {
+                is_readable($file) && $zip->addFile($file, basename($file));
+            }
+            
         }
         
         return $zip->close();
