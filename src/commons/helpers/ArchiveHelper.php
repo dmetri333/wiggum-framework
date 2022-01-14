@@ -40,9 +40,17 @@ class ArchiveHelper
                 $basename = StringHelper::incrementString($name).'.'.$ext;
             }
             
-            if (is_readable($file)) {
-                $zip->addFile($file, $basename);
-                $localNames[] = $basename;
+            if (substr($file, 0, 4) === 'http') {
+                $contents = file_get_contents($file);
+                if (!empty($contents)) {
+                    $zip->addFromString($basename, $contents);
+                    $localNames[] = $basename;
+                }
+            } else {
+                if (is_readable($file)) {
+                    $zip->addFile($file, $basename);
+                    $localNames[] = $basename;
+                }
             }
 
         }
