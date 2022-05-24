@@ -32,14 +32,14 @@ class Container implements ArrayAccess
 	 * {@inheritDoc}
 	 * @see ArrayAccess::offsetSet()
 	 */
-	public function offsetSet($id, $value)
+	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		if (isset($this->frozen[$id])) {
-			throw new \RuntimeException(sprintf('Cannot override frozen service "%s".', $id));
+		if (isset($this->frozen[$offset])) {
+			throw new \RuntimeException(sprintf('Cannot override frozen service "%s".', $offset));
 		}
 
-		$this->values[$id] = $value;
-		$this->keys[$id] = true;
+		$this->values[$offset] = $value;
+		$this->keys[$offset] = true;
 	}
 
 	/**
@@ -47,30 +47,30 @@ class Container implements ArrayAccess
 	 * {@inheritDoc}
 	 * @see ArrayAccess::offsetGet()
 	 */
-	public function offsetGet($id)
+	public function offsetGet(mixed $offset): mixed
 	{
-		if (!isset($this->keys[$id])) {
-			throw new \InvalidArgumentException(sprintf('Identifier "%s" is not defined.', $id));
+		if (!isset($this->keys[$offset])) {
+			throw new \InvalidArgumentException(sprintf('Identifier "%s" is not defined.', $offset));
 		}
 
 		if (
-			isset($this->raw[$id])
-			|| !is_object($this->values[$id])
-			|| isset($this->protected[$this->values[$id]])
-			|| !method_exists($this->values[$id], '__invoke')
+			isset($this->raw[$offset])
+			|| !is_object($this->values[$offset])
+			|| isset($this->protected[$this->values[$offset]])
+			|| !method_exists($this->values[$offset], '__invoke')
 		) {
-			return $this->values[$id];
+			return $this->values[$offset];
 		}
 
-		if (isset($this->factories[$this->values[$id]])) {
-			return $this->values[$id]($this);
+		if (isset($this->factories[$this->values[$offset]])) {
+			return $this->values[$offset]($this);
 		}
 
-		$raw = $this->values[$id];
-		$val = $this->values[$id] = $raw($this);
-		$this->raw[$id] = $raw;
+		$raw = $this->values[$offset];
+		$val = $this->values[$offset] = $raw($this);
+		$this->raw[$offset] = $raw;
 
-		$this->frozen[$id] = true;
+		$this->frozen[$offset] = true;
 
 		return $val;
 	}
@@ -80,9 +80,9 @@ class Container implements ArrayAccess
 	 * {@inheritDoc}
 	 * @see ArrayAccess::offsetExists()
 	 */
-	public function offsetExists($id)
+	public function offsetExists(mixed $offset): bool
 	{
-		return isset($this->keys[$id]);
+		return isset($this->keys[$offset]);
 	}
 
 	/**
@@ -90,14 +90,14 @@ class Container implements ArrayAccess
 	 * {@inheritDoc}
 	 * @see ArrayAccess::offsetUnset()
 	 */
-	public function offsetUnset($id)
+	public function offsetUnset(mixed $offset): void
 	{
-		if (isset($this->keys[$id])) {
-			if (is_object($this->values[$id])) {
-				unset($this->factories[$this->values[$id]], $this->protected[$this->values[$id]]);
+		if (isset($this->keys[$offset])) {
+			if (is_object($this->values[$offset])) {
+				unset($this->factories[$this->values[$offset]], $this->protected[$this->values[$offset]]);
 			}
 
-			unset($this->values[$id], $this->frozen[$id], $this->raw[$id], $this->keys[$id]);
+			unset($this->values[$offset], $this->frozen[$offset], $this->raw[$offset], $this->keys[$offset]);
 		}
 	}
 
