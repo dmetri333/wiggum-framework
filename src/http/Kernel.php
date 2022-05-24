@@ -126,7 +126,8 @@ class Kernel extends \wiggum\foundation\Kernel
 				header($name .': '. $value);
 			}
 	
-			http_response_code($response->getStatusCode());
+			if ($response->getStatusCode() !== null)
+				http_response_code($response->getStatusCode());
 	
 			$contentType = $response->getContentType();
 			if (isset($contentType)) {
