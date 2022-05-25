@@ -32,7 +32,7 @@ class Container implements ArrayAccess
 	 * {@inheritDoc}
 	 * @see ArrayAccess::offsetSet()
 	 */
-	public function offsetSet(mixed $offset, mixed $value): void
+	public function offsetSet($offset, $value)
 	{
 		if (isset($this->frozen[$offset])) {
 			throw new \RuntimeException(sprintf('Cannot override frozen service "%s".', $offset));
@@ -47,7 +47,7 @@ class Container implements ArrayAccess
 	 * {@inheritDoc}
 	 * @see ArrayAccess::offsetGet()
 	 */
-	public function offsetGet(mixed $offset): mixed
+	public function offsetGet($offset)
 	{
 		if (!isset($this->keys[$offset])) {
 			throw new \InvalidArgumentException(sprintf('Identifier "%s" is not defined.', $offset));
@@ -80,7 +80,7 @@ class Container implements ArrayAccess
 	 * {@inheritDoc}
 	 * @see ArrayAccess::offsetExists()
 	 */
-	public function offsetExists(mixed $offset): bool
+	public function offsetExists($offset)
 	{
 		return isset($this->keys[$offset]);
 	}
@@ -90,7 +90,7 @@ class Container implements ArrayAccess
 	 * {@inheritDoc}
 	 * @see ArrayAccess::offsetUnset()
 	 */
-	public function offsetUnset(mixed $offset): void
+	public function offsetUnset($offset)
 	{
 		if (isset($this->keys[$offset])) {
 			if (is_object($this->values[$offset])) {
