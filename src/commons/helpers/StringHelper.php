@@ -8,9 +8,9 @@ class StringHelper
      *
      * @param string $haystack
      * @param string $needle
-     * @return boolean
+     * @return bool
      */
-    public static function startsWith($haystack, $needle)
+    public static function startsWith(string $haystack, string $needle): bool
     {
         if (empty($needle)) return false;
         
@@ -21,9 +21,9 @@ class StringHelper
      *
      * @param string $haystack
      * @param string $needle
-     * @return boolean
+     * @return bool
      */
-    public static function endsWith($haystack, $needle)
+    public static function endsWith(string $haystack, string $needle): bool
     {
         if (empty($needle)) return false;
         
@@ -38,7 +38,7 @@ class StringHelper
      * @param string $subject
      * @return string
      */
-    public static function replaceFirst($search, $replace, $subject)
+    public static function replaceFirst(string $search, string $replace, string $subject): string
     {
         if ($search == '') {
             return $subject;
@@ -60,7 +60,7 @@ class StringHelper
      * @param string $subject
      * @return string
      */
-    public static function replaceLast($search, $replace, $subject)
+    public static function replaceLast(string $search, string $replace, string $subject): string
     {
         $position = strrpos($subject, $search);
         if ($position !== false) {
@@ -75,7 +75,7 @@ class StringHelper
      * @param string $first
      * @return string
      */
-    public static function incrementString($str, $separator = '-', $first = 1)
+    public static function incrementString(string $str, string $separator = '-', int $first = 1): string
     {
         preg_match('/(.+)'.preg_quote($separator, '/').'([0-9]+)$/', $str, $match);
         return isset($match[2]) ? $match[1].$separator.($match[2] + 1) : $str.$separator.$first;
@@ -87,7 +87,7 @@ class StringHelper
      * @param int $len
      * @return string
      */
-    public static function randomString($type = 'alnum', $len = 8)
+    public static function randomString(string $type = 'alnum', int $len = 8): string
     {
         switch ($type) {
             case 'basic':
@@ -120,16 +120,15 @@ class StringHelper
     
     /**
      * 
-     * @param string
-     * @param string
-     * @param bool - trim the character from the beginning/end
+     * @param string $str
+     * @param string $character
+     * @param bool $trim - trim the character from the beginning/end
      * @return string
      */
-    public static function reduceMultiples($str, $character = ',', $trim = false)
+    public static function reduceMultiples(string $str, string $character = ',', bool $trim = false): string
     {
         $str = preg_replace('#'.preg_quote($character, '#').'{2,}#', $character, $str);
         return ($trim === true) ? trim($str, $character) : $str;
     }
-
 
 }
