@@ -104,6 +104,7 @@ class Kernel extends \wiggum\foundation\Kernel
 		$request->setParameters(array_merge($_GET, $_POST));
 		$request->setCookies($_COOKIE);
 		$request->setFiles($_FILES);
+		$request->withBody(file_get_contents('php://input'));
 		
 		$headers = array_change_key_case(getallheaders(), CASE_LOWER);
 		$request->setHeaders($headers);
