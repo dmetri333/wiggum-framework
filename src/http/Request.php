@@ -13,6 +13,7 @@ class Request
 	private $attributes;
 	private $cookies;
 	private $files;
+	private $body;
 	private $headers = [];
 	
 	public function getRequestURI()
@@ -139,6 +140,16 @@ class Request
 	public function setCookies(array $cookies)
 	{
 		$this->cookies = $cookies;
+	}
+	
+	public function getBody() : string 
+	{
+		return $this->body;
+	}
+
+	public function withBody(String $body) : void
+	{
+		$this->body = $body;
 	}
 	
 	public function getFiles()
