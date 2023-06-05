@@ -4,7 +4,8 @@ namespace wiggum\foundation;
 abstract class Controller
 {
 	
-	protected $app;
+	protected Application $app;
+	protected array $properties;
 	
 	/**
 	 * 
@@ -13,6 +14,7 @@ abstract class Controller
 	public function __construct(Application $app)
 	{
 		$this->app = $app;
+		$this->properties = [];
 	}
 	
 	/**
@@ -24,6 +26,16 @@ abstract class Controller
 		return $this->app;
 	}
 	
+	/**
+	 *
+	 * @param string $name
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function setProperty(string $name, mixed $value): void {
+		$this->properties[$name] = $value;
+    }
+
 	/**
 	 * Calling a non-existant var on Controller checks to see if there's an item
 	 * in the container that is callable and if so, calls it.
@@ -37,7 +49,11 @@ abstract class Controller
 			$obj = $this->app->getContainer()->offsetGet($name);
 			return $obj;
 		}
-		
+
+		if (isset($this->properties[$name])) {
+			return $this->properties[$name];
+		}
+
 		throw new \Exception('Unrecognized property ' . $name);
 	}
 	

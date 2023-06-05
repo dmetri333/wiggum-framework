@@ -182,7 +182,7 @@ class Kernel extends \wiggum\foundation\Kernel
     
         if (isset($actions['properties'])) {
             foreach ($actions['properties'] as $property => $value) {
-                $controller->{$property} = $value;
+                $controller->setProperty($property, $value);
             }
         }
         
