@@ -62,6 +62,10 @@ class StringHelper
      */
     public static function replaceLast(string $search, string $replace, string $subject): string
     {
+		if ($search == '') {
+			return $subject;
+		}
+
         $position = strrpos($subject, $search);
         if ($position !== false) {
             return substr_replace($subject, $replace, $position, strlen($search));
@@ -91,7 +95,7 @@ class StringHelper
     {
         switch ($type) {
             case 'basic':
-                return mt_rand();
+				return (string) mt_rand();
             case 'alnum':
             case 'numeric':
             case 'nozero':
@@ -115,6 +119,8 @@ class StringHelper
                 return md5(uniqid(mt_rand()));
             case 'sha1':
                 return sha1(uniqid(mt_rand(), true));
+			default:
+				return '';
         }
     }
     

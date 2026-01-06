@@ -6,7 +6,7 @@ class Response
 	
 	private $contentType;
 	private $headers = [];
-	private $output;
+	private $output = '';
 	private $redirect;
 	private $code;
 	private $reasonPhrase;
@@ -38,7 +38,7 @@ class Response
 	
 	public function getHeader($name)
 	{
-		return $this->headers[$name];
+		return $this->headers[$name] ?? null;
 	}
 	
 	public function setOutput($output)
@@ -48,7 +48,7 @@ class Response
 	
 	public function appendOutput($output)
 	{
-		$this->output .= $output;
+		$this->output .= (string) $output;
 	}
 	
 	public function getOutput()

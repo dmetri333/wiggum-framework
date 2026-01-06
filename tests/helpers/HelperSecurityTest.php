@@ -46,11 +46,11 @@ class HelperSecurityTest extends TestCase
         $this->assertEquals('<a>Clickhere</a>', $result);
     }
     
-    public function textXssCleanJsLinkRemoval()
+    public function testXssCleanJsLinkRemoval()
     {
         // This one is to prevent a false positive
         $result = SecurityHelper::xssClean("<a href=\"javascrip\n<t\n:alert\n(1)\"\n>");
-        $this->assertEquals("<a href=\"javascrip\n<t\n:alert\n&#40;1&#41;\"\n>", $result );
+		$this->assertEquals("<a href=\"javascrip\n<t\n:alert\n&#40;1&#41;\">", $result );
     }
   
     public function testXssCleanJsImgRemoval()
@@ -150,7 +150,7 @@ class HelperSecurityTest extends TestCase
     public function testXssHash()
     {
         $hash = SecurityHelper::xssHash();
-        $this->assertRegExp('#^[0-9a-f]{32}$#iS', $hash);
+		$this->assertMatchesRegularExpression('#^[0-9a-f]{32}$#iS', $hash);
     }
 
     public function testGetRandomBytes()

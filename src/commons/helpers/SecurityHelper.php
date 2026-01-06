@@ -374,39 +374,14 @@ class SecurityHelper
         if (empty($length) || !ctype_digit((string) $length)) {
             return false;
         }
-        
-        if (function_exists('random_bytes')) {
-            try {
-                // The cast is required to avoid TypeError
-                return random_bytes((int) $length);
-            } catch (\Exception $e) {
-                // If random_bytes() can't do the job, we can't either ...
-                // There's no point in using fallbacks.
-                error_log($e->getMessage());
-                return false;
-            }
+
+        try {
+            // The cast is required to avoid TypeError
+            return random_bytes((int) $length);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-        
-        // Unfortunately, none of the following PRNGs is guaranteed to exist ...
-        if (defined('MCRYPT_DEV_URANDOM') && ($output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)) !== false) {
-            return $output;
-        }
-        
-        if (is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
-            // Try not to waste entropy ...
-            stream_set_chunk_size($fp, $length);
-            $output = fread($fp, $length);
-            fclose($fp);
-            if ($output !== false) {
-                return $output;
-            }
-        }
-        
-        if (function_exists('openssl_random_pseudo_bytes')) {
-            return openssl_random_pseudo_bytes($length);
-        }
-        
-        return false;
     }
     
     /**

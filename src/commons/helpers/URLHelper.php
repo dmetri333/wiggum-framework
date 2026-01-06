@@ -99,9 +99,9 @@ class URLHelper
      */
     private static function stringifyAttributes($attributes, bool $js = false): ?string
     {
-        $atts = null;
+		$atts = '';
         if (empty($attributes)) {
-            return $atts;
+			return null;
         }
         
         if (is_string($attributes)) {

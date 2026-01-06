@@ -1,19 +1,20 @@
 <?php
 namespace wiggum\http;
 
+#[\AllowDynamicProperties]
 class Request
 {
 	
 	private $requestURI;
 	private $serverName;
 	private $contextPath;
-	private $contextPathSegments;
+	private $contextPathSegments = [];
 	private $method;
-	private $parameters;
-	private $attributes;
-	private $cookies;
-	private $files;
-	private $body;
+	private $parameters = [];
+	private $attributes = [];
+	private $cookies = [];
+	private $files = [];
+	private $body = '';
 	private $headers = [];
 	
 	public function getRequestURI()
@@ -48,7 +49,7 @@ class Request
 	
 	public function getContextPathSegment($index)
 	{
-		return $this->contextPathSegments[$index];
+		return $this->contextPathSegments[$index] ?? null;
 	}
 	
 	public function getContextPathSegments()
@@ -77,12 +78,12 @@ class Request
 		return $this->parameters;
 	}
 	
-	public function getParameter($name, $default = null)
+	public function getParameter(string $name, $default = null) : ?string
 	{
 		return isset($this->parameters[$name]) ? $this->parameters[$name] : (isset($default) ? $default : null);
 	}
 
-	public function hasParameter($name)
+	public function hasParameter(string $name) : bool
 	{
 		return isset($this->parameters[$name]);
 	}
@@ -92,8 +93,11 @@ class Request
 		$this->parameters = $parameters;
 	}
 	
-	public function setParameter($name, $value)
+	public function setParameter(string $name, $value)
 	{
+		if (!isset($this->parameters)) {
+			$this->parameters = [];
+		}
 		$this->parameters[$name] = $value;
 	}
 	
@@ -107,17 +111,20 @@ class Request
 		$this->attributes = $attributes;
 	}
 	
-	public function getAttribute($name, $default = null)
+	public function getAttribute(string $name, $default = null)
 	{
 		return isset($this->attributes[$name]) ? $this->attributes[$name] : (isset($default) ? $default : null);
 	}
 	
-	public function setAttribute($name, $value)
+	public function setAttribute(string $name, $value)
 	{
+		if (!isset($this->attributes)) {
+			$this->attributes = [];
+		}
 		$this->attributes[$name] = $value;
 	}
 	
-	public function hasAttribute($name)
+	public function hasAttribute(string $name) : bool
 	{
 		return isset($this->attributes[$name]);
 	}
@@ -127,12 +134,12 @@ class Request
 		return $this->cookies;
 	}
 	
-	public function getCookie($name, $default = null)
+	public function getCookie(string $name, $default = null) : ?string
 	{
 		return isset($this->cookies[$name]) ? $this->cookies[$name] : (isset($default) ? $default : null);
 	}
 	
-	public function hasCookie($name)
+	public function hasCookie(string $name) : bool
 	{
 		return isset($this->cookies[$name]);
 	}
@@ -147,7 +154,7 @@ class Request
 		return $this->body;
 	}
 
-	public function withBody(String $body) : void
+	public function withBody(string $body) : void
 	{
 		$this->body = $body;
 	}
@@ -157,14 +164,14 @@ class Request
 		return $this->files;
 	}
 
-	public function getFile($name)
+	public function getFile(string $name)
 	{
-		return $this->files[$name];
+		return $this->files[$name] ?? null;
 	}
 	
 	public function setFiles(array $files)
 	{
-		$this->files = array();
+		$this->files = [];
 		if (!empty($files)) {
 			foreach($files as $key => $value) {
 				if (is_array($value['name'])) {
@@ -176,9 +183,9 @@ class Request
 		}
 	}
 	
-	private function reorderMultipleFiles(array $files)
+	private function reorderMultipleFiles(array $files) : array
 	{
-		$result = array();
+		$result = [];
 		foreach($files as $key1 => $value1) {
 			foreach($value1 as $key2 => $value2) {
 				$result[$key2][$key1] = $value2;
@@ -187,27 +194,30 @@ class Request
 		return $result;
 	}
 	
-	public function setHeaders($headers)
+	public function setHeaders(array $headers)
 	{
 		$this->headers = $headers;
 	}
 	
-	public function getHeaders()
+	public function getHeaders() : array
 	{
 		return $this->headers;
 	}
 	
-	public function hasHeader($name)
+	public function hasHeader(string $name) : bool
 	{
 		return isset($this->headers[$name]);
 	}
 	
-	public function addHeader($name, $value)
+	public function addHeader(string $name, $value)
 	{
+		if (!isset($this->headers)) {
+			$this->headers = [];
+		}
 		$this->headers[$name] = $value;
 	}
 	
-	public function getHeader($name)
+	public function getHeader(string $name)
 	{
 		return isset($this->headers[$name]) ? $this->headers[$name] : null;
 	}

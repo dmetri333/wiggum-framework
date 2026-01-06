@@ -1,9 +1,10 @@
 <?php
 namespace wiggum\foundation;
 
-use \wiggum\commons\Container;
-use \wiggum\commons\Configuration;
+use wiggum\commons\Container;
+use wiggum\commons\Configuration;
 
+#[\AllowDynamicProperties]
 class Application
 {
 

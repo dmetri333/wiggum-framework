@@ -1,6 +1,7 @@
 <?php
 namespace wiggum\foundation;
 
+#[\AllowDynamicProperties]
 abstract class Controller
 {
 	
